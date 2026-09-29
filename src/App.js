@@ -1,11 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+
+const GEORGIA_FLAG_URL =
+  'https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Flag_of_Georgia_%28transparent_background%29.svg/3840px-Flag_of_Georgia_%28transparent_background%29.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail';
+
+
+
+
+const USER_PHOTOS = {
+  aliAndNino:
+    '',
+  batumiBoulevard:
+    'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2000&q=85',
+  botanicalGarden:
+    '',
+  argoCableCar:
+    'https://cdn.getyourguide.com/image/format=auto%2Cfit=crop%2Cgravity=auto%2Cquality=60%2Cwidth=375%2Cheight=375%2Cdpr=2/tour_img/2b2a3bcc33135bf1f574c81ec94868d7e3502307da72e938294fe183e4ba77cf.jpg',
+  georgiaFlag:
+    'https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Flag_of_Georgia_%28transparent_background%29.svg/3840px-Flag_of_Georgia_%28transparent_background%29.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail',
+};
+
 
 
 // Zero-dependency SVG Icons compatible with Create React App and React 19
 const Sun = (props) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+  </svg>
+);
+const CloudRain = (props) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/>
+  </svg>
+);
+const Cloud = (props) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+  </svg>
+);
+const RefreshCw = (props) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>
   </svg>
 );
 const Waves = (props) => (
@@ -168,6 +203,68 @@ const ShieldCheck = (props) => (
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>
   </svg>
 );
+const Send = (props) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+  </svg>
+);
+
+const PushPin = ({ className = '', color = 'red' }) => (
+  <div className={`relative inline-flex items-center justify-center filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.55)] z-20 pointer-events-none select-none ${className}`}>
+    <div className={`w-5 h-5 rounded-full border border-black/30 shadow-inner flex items-center justify-center relative ${
+      color === 'amber'
+        ? 'bg-gradient-to-br from-amber-300 via-amber-500 to-amber-800'
+        : color === 'blue'
+        ? 'bg-gradient-to-br from-sky-400 via-blue-600 to-blue-900'
+        : 'bg-gradient-to-br from-rose-400 via-red-600 to-red-950'
+    }`}>
+      {/* 3D Gloss Highlight */}
+      <div className="w-1.5 h-1.5 rounded-full bg-white/80 absolute top-0.5 left-1 pointer-events-none" />
+      {/* Metal center pin nail */}
+      <div className="w-1 h-1 rounded-full bg-slate-200/90 shadow-xs" />
+    </div>
+    {/* Needle Shadow */}
+    <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-0.5 h-2.5 bg-gradient-to-b from-stone-700 to-stone-900 -z-10 opacity-70" />
+  </div>
+);
+
+const MaskingTape = ({ className = '' }) => (
+  <div
+    className={`h-4 w-12 bg-amber-100/70 backdrop-blur-[0.5px] border-t border-b border-amber-300/40 shadow-xs pointer-events-none select-none z-10 ${className}`}
+    style={{
+      backgroundImage: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.2) 0px, rgba(255,255,255,0.2) 2px, transparent 2px, transparent 4px)',
+    }}
+  />
+);
+
+const PaperClip = (props) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+  </svg>
+);
+
+const StarRatingBadge = ({ rating = 5, stars = 5, reviewsCount, showText = true, size = 'sm', className = '' }) => {
+  const starCount = Math.min(5, Math.max(1, Math.round(stars || rating)));
+  const iconSize = size === 'xs' ? 'w-3 h-3' : size === 'lg' ? 'w-4 h-4' : 'w-3.5 h-3.5';
+  return (
+    <div className={`inline-flex items-center gap-1.5 ${className}`}>
+      <div className="flex items-center gap-0.5 text-amber-400">
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            className={`${iconSize} ${i < starCount ? 'fill-amber-400 text-amber-400' : 'fill-slate-200 text-slate-300'}`}
+          />
+        ))}
+      </div>
+      {showText && (
+        <span className="font-extrabold text-xs text-slate-800 flex items-center gap-1">
+          <span>{Number(rating).toFixed(1)}</span>
+          {reviewsCount && <span className="text-[10px] text-slate-400 font-normal">({reviewsCount})</span>}
+        </span>
+      )}
+    </div>
+  );
+};
 
 // --- DATA DEFINITIONS ---
 const CURRENCY_RATES = {
@@ -178,6 +275,7 @@ const CURRENCY_RATES = {
   TRY: { symbol: '₺', rate: 12.8, name: 'Turkish Lira' },
 };
 
+
 const ATTRACTIONS = [
   {
     id: 'ali-nino',
@@ -185,6 +283,7 @@ const ATTRACTIONS = [
     georgianName: 'ალი და ნინო',
     category: 'Landmarks',
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf6qyqhJWl94NfV_3iFwLe_SmAxdyJ03TEjhfZnKBFWFi99MnkmKwXXMY&s=10',
+    isUserPhoto: true,
     rating: 4.9,
     reviewsCount: 3820,
     duration: '30-45 mins',
@@ -202,6 +301,7 @@ const ATTRACTIONS = [
     georgianName: 'ბათუმის ბულვარი',
     category: 'Beaches & Boulevard',
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzbGCCMZbcKI00Lqzlz2J5pNlO62vDHUNzoctFXuLmTgcvddYyEe1BHdog&s=10',
+    isUserPhoto: true,
     rating: 4.8,
     reviewsCount: 5210,
     duration: '2 - 4 hours',
@@ -219,6 +319,7 @@ const ATTRACTIONS = [
     georgianName: 'ბათუმის ბოტანიკური ბაღი',
     category: 'Nature & Parks',
     image: 'https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nLzNiZDExNjU2MjlhMTRmNDk4OTM3ZTZhN2ZmMWU1MjgzIiwiZWRpdHMiOnsicmVzaXplIjp7IndpZHRoIjo2NDAsImhlaWdodCI6NjQwLCJmaXQiOiJpbnNpZGUifSwicm90YXRlIjpudWxsLCJ0b0Zvcm1hdCI6ICJ3ZWJwIn19',
+    isUserPhoto: true,
     rating: 4.9,
     reviewsCount: 4650,
     duration: '3 - 5 hours',
@@ -230,12 +331,13 @@ const ATTRACTIONS = [
     insiderTip: 'Take marshrutka #31 from center for 0.80 GEL. Bring comfortable shoes.',
     bestTime: '09:00 - 14:00',
   },
-   {
+  {
     id: 'argo-cable-car',
     name: 'Argo Cable Car & Anuria Viewpoint',
     georgianName: 'საბაგირო გზა არგო',
     category: 'Viewpoints',
-    image: 'https://cdn.getyourguide.com/image/format=auto%2Cfit=crop%2Cgravity=auto%2Cquality=60%2Cwidth=375%2Cheight=375%2Cdpr=2/tour_img/2b2a3bcc33135bf1f574c81ec94868d7e3502307da72e938294fe183e4ba77cf.jpg',
+    image: USER_PHOTOS.argoCableCar,
+    isUserPhoto: true,
     rating: 4.7,
     reviewsCount: 3120,
     duration: '1.5 hours',
@@ -269,7 +371,7 @@ const ATTRACTIONS = [
     name: 'Piazza Square & Old Batumi',
     georgianName: 'პიაცა და ძველი ბათუმი',
     category: 'Culture & History',
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrO9uLM6eWaEvjBSC-P1PWZRVVOJA-QSVATexQmEpHkdqvgF7LN2ft-98&s=10',
+    image: 'https://cdn.getyourguide.com/image/format=auto%2Cfit=crop%2Cgravity=auto%2Cquality=60%2Cwidth=400%2Cheight=265%2Cdpr=2/tour_img/391cbaeb78911ed820751920acb78485b4c938d20a6b0de8edbda7314c0c3aa5.jpg',
     rating: 4.8,
     reviewsCount: 3940,
     duration: '2 hours',
@@ -286,7 +388,7 @@ const ATTRACTIONS = [
     name: 'Makhuntseti Waterfall & Tamar Bridge',
     georgianName: 'მახუნცეთი და თამარის ხიდი',
     category: 'Nature & Parks',
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWINtjwa_DkWZ4szUvQn88owVhpppyOdqq5DYNSiHAkQ&s=10',
+    image: 'https://dmc.mygeorgia.travel/thumb/2/ad0qzigCzucG3HmJZXh07A/r/d/1465914781_most-caricy-tamary.jpg',
     rating: 4.9,
     reviewsCount: 2890,
     duration: 'Half Day',
@@ -337,7 +439,7 @@ const ATTRACTIONS = [
     name: 'Mtirala Subtropical Rainforest',
     georgianName: 'მტირალას ეროვნული პარკი',
     category: 'Nature & Parks',
-    image: 'https://cdn.getyourguide.com/image/format=auto%2Cfit=crop%2Cgravity=auto%2Cquality=60%2Cwidth=400%2Cheight=265%2Cdpr=2/tour_img/ff290e06f9ef49e8607f2ba1e68f2e9fe5ab3b7524e55de4800324cd50926c74.jpg',
+    image: 'https://nationalparks.ge/files/155246262423mtirala2.jpg',
     rating: 4.9,
     reviewsCount: 1650,
     duration: 'Full Day',
@@ -350,6 +452,443 @@ const ATTRACTIONS = [
     bestTime: '09:00 - 16:00',
   },
 ];
+
+const BATUMI_RESTAURANTS = [
+  {
+    id: 'retro-khachapuri',
+    name: 'Retro Khachapuri House',
+    georgianName: 'რეტრო',
+    stars: 5,
+    rating: 4.9,
+    reviewsCount: 2450,
+    priceRange: '₾₾ (14 - 25 GEL)',
+    avgPriceGEL: 18,
+    cuisineType: 'Authentic Adjarian & Bakeries',
+    mealTypes: ['Breakfast', 'Lunch', 'Dinner'],
+    address: '54 Tbel Abuseridze St, Batumi',
+    location: '54 Tbel Abuseridze St, Batumi',
+    hours: '08:30 – 23:00 Daily',
+    phone: '+995 577 31 41 51',
+    image: 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Retro+Batumi+Tbel+Abuseridze',
+    tagline: 'The Gold Standard of Authentic Adjarian Khachapuri in Georgia',
+    description: 'Founded by master baker Gia Agirba, Retro is considered by culinary critics to be the ultimate benchmark for Acharuli Khachapuri. Dough is scraped thin from the inner walls, the boat baked blistered and golden, filled with bubbling young Sulguni, mountain butter, and an organic egg yolk.',
+    signatureDishes: [
+      { name: 'Titanic Adjarian Khachapuri', priceGEL: 16, note: 'Giant boat with crisp crust and molten mountain cheese lava' },
+      { name: 'Smoked Sulguni Khachapuri', priceGEL: 18, note: 'Infused with wood-smoked mountain cheese' },
+      { name: 'Fresh Tarkhuna (Tarragon Lemonade)', priceGEL: 4, note: 'Traditional bright emerald herbal lemonade chilled on ice' },
+    ],
+    ambiance: ['Casual & Lively', 'Family Friendly', 'Wood-fired Brick Oven', 'Fast Service'],
+    mustTry: 'Order size "Medium" with an extra pat of country butter, whisk vigorously with your fork.',
+  },
+  {
+    id: 'chocolatte-coffee-room',
+    name: 'Chocolatte Coffee-Room',
+    georgianName: 'შოკოლატე',
+    stars: 5,
+    rating: 4.9,
+    reviewsCount: 1120,
+    priceRange: '₾ (10 - 20 GEL)',
+    avgPriceGEL: 15,
+    cuisineType: 'Artisanal Cafe & Morning Brunch',
+    mealTypes: ['Breakfast'],
+    address: '13 Memed Abashidze Ave, Batumi',
+    location: '13 Memed Abashidze Ave, Batumi',
+    hours: '08:00 – 18:00 Daily',
+    phone: '+995 593 39 88 55',
+    image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Chocolatte+Coffee-Room+Batumi+Abashidze',
+    tagline: 'Batumi’s Favorite Cozy Morning Specialty Coffee & Syrniki Haven',
+    description: 'A charming breakfast haven in historic Batumi serving specialty espresso, hand-brewed aeropress, fluffy cottage cheese syrniki with warm berry compote, and wholesome avocado toast.',
+    signatureDishes: [
+      { name: 'Golden Cottage Cheese Syrniki', priceGEL: 12, note: 'Warm farmers curd pancakes with sour cream & cherry jam' },
+      { name: 'Avocado & Poached Egg Brioche', priceGEL: 15, note: 'Fresh avocado, toasted seeds, and velvety hollandaise' },
+      { name: 'Flat White & Specialty Brew', priceGEL: 7, note: 'Single-origin Ethiopian roast' },
+    ],
+    ambiance: ['Quiet & Cozy', 'Digital Nomad Friendly', 'Boutique Decor', 'Outdoor Pavement Seating'],
+    mustTry: 'Hot Syrniki with homemade berry compote paired with a flat white.',
+  },
+  {
+    id: 'laguna-cafe',
+    name: 'Laguna Cafe',
+    georgianName: 'ლაგუნა',
+    stars: 5,
+    rating: 4.8,
+    reviewsCount: 1890,
+    priceRange: '₾₾ (12 - 22 GEL)',
+    avgPriceGEL: 16,
+    cuisineType: 'Traditional Khachapuri Institution',
+    mealTypes: ['Breakfast', 'Lunch'],
+    address: '18 Zurab Gorgiladze St, Batumi',
+    location: '18 Zurab Gorgiladze St, Batumi',
+    hours: '09:00 – 22:30 Daily',
+    phone: '+995 422 27 60 76',
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Laguna+Cafe+Batumi+Gorgiladze',
+    tagline: 'Beloved Old-School Cellar with Unmatched Crispy Dough Crusts',
+    description: 'Operating for over three decades, Laguna is famous for its crispy pastry boats and option for purified dough (where excess soft dough is hollowed out to maximize cheese).',
+    signatureDishes: [
+      { name: 'Laguna Special Khachapuri (Purified)', priceGEL: 15, note: 'Extra thin crispy crust with double Sulguni center' },
+      { name: 'Imeretian Khachapuri', priceGEL: 13, note: 'Circular cheese pie baked in round clay dish' },
+      { name: 'Zedazeni Pear Soda', priceGEL: 3.5, note: 'Iconic Georgian glass bottle soda' },
+    ],
+    ambiance: ['Authentic Retro', 'Locals Favorite', 'Air Conditioned', 'Generous Portions'],
+    mustTry: 'Ask for "Gafkhapuli" (dough stripped inside for extreme crunch).',
+  },
+  {
+    id: 'privet-iz-batuma',
+    name: 'Privet iz Batuma Cafe',
+    georgianName: 'მოკითხვა ბათუმიდან',
+    stars: 5,
+    rating: 4.8,
+    reviewsCount: 1350,
+    priceRange: '₾₾ (12 - 25 GEL)',
+    avgPriceGEL: 18,
+    cuisineType: 'Historic European & Georgian Tea Salon',
+    mealTypes: ['Breakfast', 'Lunch'],
+    address: '39 Konstantine Gamsakhurdia St, Old Batumi',
+    location: '39 Konstantine Gamsakhurdia St, Old Batumi',
+    hours: '08:30 – 23:00 Daily',
+    phone: '+995 422 27 00 90',
+    image: 'https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Privet+iz+Batuma+Gamsakhurdia',
+    tagline: 'Nostalgic 19th-Century European Tea Salon Near Europe Square',
+    description: 'Decorated with vintage sepia photographs and antique lace, serving breakfast crepes, hot clay-pot Lobio beans with cornbread, and multi-layered honey cakes.',
+    signatureDishes: [
+      { name: 'Hot Lobio in Clay Pot', priceGEL: 11, note: 'Spiced red kidney beans with pickled jonjoli and mchadi' },
+      { name: 'Crepes with Local Walnut & Honey', priceGEL: 9, note: 'Thin golden blini with Adjarian mountain honey' },
+      { name: 'Adjarian Herb Omelette', priceGEL: 10, note: 'Fresh coriander, dill, and melted cheese' },
+    ],
+    ambiance: ['Romantic Vintage', 'Europe Square Views', 'Classical Music', 'Historic Balcony'],
+    mustTry: 'Morning clay pot Lobio with crispy cornbread and mountain tea.',
+  },
+  {
+    id: 'porto-franco',
+    name: 'Porto Franco',
+    georgianName: 'პორტო ფრანკო',
+    stars: 5,
+    rating: 4.7,
+    reviewsCount: 1620,
+    priceRange: '₾₾ (15 - 30 GEL)',
+    avgPriceGEL: 22,
+    cuisineType: 'Old Town Brick-Oven Grill & Khachapuri',
+    mealTypes: ['Lunch', 'Dinner'],
+    address: '40 Konstantine Gamsakhurdia St, Old Batumi',
+    location: '40 Konstantine Gamsakhurdia St, Old Batumi',
+    hours: '10:00 – 23:30 Daily',
+    phone: '+995 599 33 22 11',
+    image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Porto+Franco+Batumi+Gamsakhurdia',
+    tagline: 'Authentic Stone-Oven Dining in Batumi’s Historic Heart',
+    description: 'A cozy Old Town taverna featuring brick vaults, open hearth ovens, and masterfully prepared Adjarian Sinori along with charcoal-grilled meats and khachapuri variations.',
+    signatureDishes: [
+      { name: 'Adjarian Sinori in Ketsi', priceGEL: 14, note: 'Rolled dough with garlic nadughi curd & sizzling butter' },
+      { name: 'Porto Franco Khachapuri with Boiled Egg', priceGEL: 16, note: 'Old regional style with sliced boiled farm egg' },
+      { name: 'Charcoal Pork Mtsvadi', priceGEL: 18, note: 'Tender pork skewers with marinated onions and pomegranate' },
+    ],
+    ambiance: ['Brick Hearth', 'Old Port Charm', 'Wine Collection', 'Hearty Portions'],
+    mustTry: 'Sinori served bubbling hot right out of the clay pot.',
+  },
+  {
+    id: 'heart-of-batumi',
+    name: 'Heart of Batumi',
+    georgianName: 'ბათუმის გული',
+    stars: 5,
+    rating: 4.9,
+    reviewsCount: 2210,
+    priceRange: '₾₾ (20 - 38 GEL)',
+    avgPriceGEL: 26,
+    cuisineType: 'Homestyle Georgian Soul Food',
+    mealTypes: ['Lunch', 'Dinner'],
+    address: '11 Mazniashvili St, Old Batumi',
+    location: '11 Mazniashvili St, Old Batumi',
+    hours: '11:00 – 23:30 Daily',
+    phone: '+995 555 40 40 05',
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Heart+of+Batumi+Mazniashvili',
+    tagline: 'Warm Family Hospitality & Unbeatable Shkmeruli Garlic Chicken',
+    description: 'One of the most praised restaurants in Batumi. Famous for its bubbling clay pots of Shkmeruli chicken in garlic milk sauce, eggplant with walnut paste, and friendly local service.',
+    signatureDishes: [
+      { name: 'Shkmeruli Garlic Chicken in Ketsi', priceGEL: 24, note: 'Crisp roasted spring chicken bathed in bubbling garlic-cream' },
+      { name: 'Badrijani Nigvzit (Eggplant Rolls)', priceGEL: 12, note: 'Fried eggplant ribbons with spiced walnut paste & pomegranate' },
+      { name: 'Ojakhuri Roasted Pork & Potatoes', priceGEL: 18, note: 'Clay pot roasted pork belly, onions, and crispy potatoes' },
+    ],
+    ambiance: ['Pedestrian Courtyard', 'Warm & Welcoming', 'Local Soul Food', 'Folk Accents'],
+    mustTry: 'Dip hot Shoti bread straight into the sizzling Shkmeruli garlic broth.',
+  },
+  {
+    id: 'old-boulevard-restaurant',
+    name: 'Old Boulevard Restaurant',
+    georgianName: 'ძველი ბულვარი',
+    stars: 5,
+    rating: 4.8,
+    reviewsCount: 1780,
+    priceRange: '₾₾₾ (35 - 70 GEL)',
+    avgPriceGEL: 45,
+    cuisineType: 'Grand Fine Georgian & European Dining',
+    mealTypes: ['Lunch', 'Dinner'],
+    address: '23a Ninoshvili St, Batumi',
+    location: '23a Ninoshvili St, Batumi',
+    hours: '11:00 – 00:00 Daily',
+    phone: '+995 422 27 57 27',
+    image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Old+Boulevard+Restaurant+Batumi',
+    tagline: 'Refined Coastal Elegance with Live Grand Piano & Adjarian Borano',
+    description: 'Batumi’s grand dame restaurant overlooking the lush seaside boulevard park. Renowned for authentic highland Adjarian Borano fondue, Black Sea turbot, and live classical piano recitals.',
+    signatureDishes: [
+      { name: 'Highland Borano Cheese Fondue', priceGEL: 17, note: 'Melted aged cheese with clarified butter and hot cornbread' },
+      { name: 'Black Sea Sturgeon Steak', priceGEL: 38, note: 'Pan-seared sturgeon with wild plum tkemali reduction' },
+      { name: 'Tkemali Glazed Lamb Chops', priceGEL: 34, note: 'Grilled tender lamb cutlets with mountain herbs' },
+    ],
+    ambiance: ['Live Grand Piano', 'Velvet Armchairs', 'Sommelier Wine List', 'Romantic Balcony'],
+    mustTry: 'Borano cheese fondue paired with a chilled glass of Chkhaveri Amber wine.',
+  },
+  {
+    id: 'sanapiro-fish-market',
+    name: 'Sanapiro Fish Market Restaurant',
+    georgianName: 'სანაპირო თევზის ბაზარი',
+    stars: 5,
+    rating: 4.8,
+    reviewsCount: 2600,
+    priceRange: '₾₾ (20 - 45 GEL)',
+    avgPriceGEL: 28,
+    cuisineType: 'Fresh Black Sea Seafood Pier & Market',
+    mealTypes: ['Lunch', 'Dinner'],
+    address: '1 Baku St (Batumi Fish Market Pier)',
+    location: '1 Baku St (Batumi Fish Market Pier)',
+    hours: '10:00 – 22:30 Daily',
+    phone: '+995 593 11 22 44',
+    image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Batumi+Fish+Market+Sanapiro',
+    tagline: 'Sea-to-Table Fish Directly from Batumi’s Morning Trawlers',
+    description: 'Pick your live fish straight from the market stalls (Turbot, Red Mullet, Salmon, Black Sea Mussels) and have the chefs fry or grill it on hot cast-iron with fresh lemon, garlic sauce, and cold draft beer on the sea deck.',
+    signatureDishes: [
+      { name: 'Pan-Fried Red Mullet (Barabulka)', priceGEL: 22, note: 'Crisp whole fish seasoned with sea salt and lemon wedges' },
+      { name: 'Black Sea Mussels in White Wine & Garlic', priceGEL: 19, note: 'Fresh local mussels with coriander and butter broth' },
+      { name: 'Grilled Black Sea Turbot (Kalkan)', priceGEL: 36, note: 'Firm succulent white meat grilled over hot coals' },
+    ],
+    ambiance: ['Sea Deck Pier', 'Casual Seaside Breeze', 'Ultra Fresh', 'Lively Atmosphere'],
+    mustTry: 'Order Barabulka with traditional hot cornbread (Mchadi) and coriander tkemali.',
+  },
+  {
+    id: 'fanfan-batumi',
+    name: 'Fanfan Bistro & Garden',
+    georgianName: 'ფანფანი',
+    stars: 5,
+    rating: 4.9,
+    reviewsCount: 1540,
+    priceRange: '₾₾₾ (25 - 55 GEL)',
+    avgPriceGEL: 35,
+    cuisineType: 'Bohemian Coastal Cuisine & Cocktails',
+    mealTypes: ['Breakfast', 'Dinner'],
+    address: '27 Ninoshvili St, Batumi',
+    location: '27 Ninoshvili St, Batumi',
+    hours: '09:30 – 01:00 Daily',
+    phone: '+995 597 00 20 20',
+    image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Fanfan+Batumi+Ninoshvili',
+    tagline: 'Batumi’s Most Stylish Bohemian Courtyard & Coastal Seafood',
+    description: 'Set inside a restored 1905 heritage townhouse with antique chandeliers, vintage wallpapers, and an enchanting ivy-wrapped secret garden terrace. Specializes in fresh seafood and craft cocktails.',
+    signatureDishes: [
+      { name: 'Black Sea Sea Bass in Herb Butter', priceGEL: 29, note: 'Pan-roasted with capers, tarragon, and roasted baby potatoes' },
+      { name: 'Seafood Risotto with Saffron', priceGEL: 28, note: 'Arborio rice infused with Black Sea shellfish broth' },
+      { name: 'Homemade Lavender Ice Cream & Tarts', priceGEL: 12, note: 'Artisanal seasonal dessert with local berries' },
+    ],
+    ambiance: ['Enchanted Garden', 'Fairy Lights', 'Eclectic Antique', 'Craft Cocktails'],
+    mustTry: 'Sit in the outdoor courtyard at dusk and pair the sea bass with a local Chkhaveri rosé.',
+  },
+  {
+    id: 'shemoikhede-genatsvale',
+    name: 'Shemoikhede Genatsvale',
+    georgianName: 'შემოიხედე გენაცვალე',
+    stars: 5,
+    rating: 4.8,
+    reviewsCount: 2850,
+    priceRange: '₾ (12 - 25 GEL)',
+    avgPriceGEL: 18,
+    cuisineType: 'Famous Khinkali Tavern & Grill',
+    mealTypes: ['Lunch', 'Dinner'],
+    address: '8 Noe Zhordania St, Old Batumi',
+    location: '8 Noe Zhordania St, Old Batumi',
+    hours: '10:00 – 00:00 Daily',
+    phone: '+995 595 11 00 22',
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Shemoikhede+Genatsvale+Batumi+Zhordania',
+    tagline: 'The Definitive Khinkali Destination in Batumi Old Town',
+    description: 'Renowned for hand-pinched, steaming hot Khinkali packed with spiced meat broth and herbs. Always packed with locals enjoying cold draft beer and hot skewers.',
+    signatureDishes: [
+      { name: 'Kalakuri Khinkali (Pork & Beef with Herbs)', priceGEL: 1.8, note: 'Steaming broth-filled dumplings with fresh cilantro (order 5+)' },
+      { name: 'Sulguni Cheese Khinkali', priceGEL: 1.7, note: 'Decadent vegetarian dumplings with molten mountain cheese' },
+      { name: 'Veal Chashushuli in Clay Pot', priceGEL: 16, note: 'Slow-simmered tender veal in spicy tomato-garlic stew' },
+    ],
+    ambiance: ['Bustling Tavern', 'Beer on Tap', 'Quick Service', 'Hearty Georgian Supra'],
+    mustTry: 'Sprinkle black pepper on the khinkali, bite a small hole, slurp the broth first, then eat.',
+  },
+  {
+    id: 'bern-restaurant',
+    name: 'Bern Restaurant & Hall',
+    georgianName: 'ბერნი',
+    stars: 5,
+    rating: 4.8,
+    reviewsCount: 1650,
+    priceRange: '₾₾ (20 - 38 GEL)',
+    avgPriceGEL: 25,
+    cuisineType: 'Hearty Caucasian & Bavarian Tavern',
+    mealTypes: ['Lunch', 'Dinner'],
+    address: '17 Rustaveli Ave, Batumi',
+    location: '17 Rustaveli Ave, Batumi',
+    hours: '11:00 – 00:00 Daily',
+    phone: '+995 422 27 64 64',
+    image: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Bern+Restaurant+Batumi+Rustaveli',
+    tagline: 'Highland Feast Platters & Craft Beer in a Grand Stone Hall',
+    description: 'Spacious stone hall restaurant with an ivy terrace serving rich Caucasian mountain stews, wood-grilled pork ribs, and hearty Adjarian cheese platters.',
+    signatureDishes: [
+      { name: 'Bern Grand Meat Board', priceGEL: 36, note: 'Assorted shashlik, smoked sausages, and roast potatoes' },
+      { name: 'Clay Pot Sizzling Kupati Sausages', priceGEL: 16, note: 'Spicy minced meat sausages with barberries' },
+      { name: 'Mtsvadi with Pomegranate Seeds', priceGEL: 18, note: 'Skewered marinated pork roasted over vine cuttings' },
+    ],
+    ambiance: ['Ivy-Covered Terrace', 'Spacious Seating', 'Great Beers', 'Festive Toasts'],
+    mustTry: 'Enjoy the outdoor summer terrace under the vine arbor with a cold draught beer.',
+  },
+  {
+    id: 'adjarian-wine-house',
+    name: 'Adjarian Wine House',
+    georgianName: 'აჭარული ღვინის სახლი',
+    stars: 5,
+    rating: 4.9,
+    reviewsCount: 1980,
+    priceRange: '₾₾₾ (40 - 85 GEL)',
+    avgPriceGEL: 50,
+    cuisineType: 'Vineyard Chateau & Mountain Gastronomy',
+    mealTypes: ['Lunch', 'Dinner'],
+    address: 'Acharistskali River Gorge (Keda Highway)',
+    location: 'Acharistskali River Gorge (Keda Highway)',
+    hours: '10:00 – 22:00 Daily',
+    phone: '+995 599 78 88 88',
+    image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Adjarian+Wine+House+Keda',
+    tagline: 'Royal Qvevri Wine Cellar & Highland Mountain Chateau',
+    description: 'Situated along the rushing mountain river in the Keda Valley. Revived the ancient pink Chkhaveri grape once reserved for Georgian royalty. Dine on wood-fired lamb and mountain trout surrounded by vineyard hills.',
+    signatureDishes: [
+      { name: 'Royal Chkhaveri Rosé Tasting Flight', priceGEL: 25, note: 'Award-winning rare mountain vintage from Keda slopes' },
+      { name: 'Keda Mountain River Trout in Cornmeal', priceGEL: 24, note: 'Crispy fried river trout with garlicky pomegranate sauce' },
+      { name: 'Spit-Roasted Suckling Pig', priceGEL: 32, note: 'Traditional holiday roast with crisp skin and tender meat' },
+    ],
+    ambiance: ['Mountain Canyon', 'Historic Marani Cellar', 'Vineyard Views', 'Riverside Patio'],
+    mustTry: 'Tour the subterranean 18th-century marani before sitting down on the riverside terrace.',
+  },
+  {
+    id: 'alphabet-tower-restaurant',
+    name: 'Alphabet Tower Revolving Restaurant',
+    georgianName: 'ანბანის კოშკი',
+    stars: 5,
+    rating: 4.7,
+    reviewsCount: 1420,
+    priceRange: '₾₾₾ (45 - 95 GEL)',
+    avgPriceGEL: 60,
+    cuisineType: 'Panoramic 360° Sky Dining & Cocktails',
+    mealTypes: ['Dinner'],
+    address: 'Miracle Park Waterfront Sphere, Batumi',
+    location: 'Miracle Park Waterfront Sphere, Batumi',
+    hours: '12:00 – 01:00 Daily',
+    phone: '+995 577 00 00 50',
+    image: 'https://images.unsplash.com/photo-1579273166152-d725a4e2b755?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Alphabet+Tower+Batumi+Restaurant',
+    tagline: 'Dine Suspended 130m in the Sky with 360° Batumi Views',
+    description: 'Located inside the glowing metallic sphere of the Alphabet Tower. Rotates 360 degrees every hour, showcasing sunset over the Black Sea on one side and the glowing Caucasus peaks on the other.',
+    signatureDishes: [
+      { name: 'Pan-Roasted Duck with Cherry Reduction', priceGEL: 38, note: 'Tender breast with Georgian plum-cherry glaze' },
+      { name: 'Black Sea Salmon with Citrus Butter', priceGEL: 36, note: 'Fresh fillet with asparagus and citrus reduction' },
+      { name: 'Sky High Signature Cocktail', priceGEL: 18, note: 'Infused with local Adjarian honey and Georgian brandy' },
+    ],
+    ambiance: ['Revolving Panorama', 'Romantic Sunset', '360° City Lights', 'Cocktail Lounge'],
+    mustTry: 'Reserve a window table 45 minutes before sunset to watch day turn to night.',
+  },
+  {
+    id: 'u-soba-green-cape',
+    name: 'Green Cape Seaside Tavern (U Soba)',
+    georgianName: 'მწვანე კონცხი რესტორანი',
+    stars: 5,
+    rating: 4.8,
+    reviewsCount: 940,
+    priceRange: '₾₾ (18 - 35 GEL)',
+    avgPriceGEL: 24,
+    cuisineType: 'Beachfront Cove Tavern & Fresh Fish',
+    mealTypes: ['Lunch', 'Dinner'],
+    address: 'Green Cape Beach Promenade (Botanical Garden Lower Exit)',
+    location: 'Green Cape Beach Promenade, Batumi',
+    hours: '10:00 – 21:30 Daily',
+    phone: '+995 599 14 25 36',
+    image: 'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Green+Cape+Beach+Batumi+Restaurant',
+    tagline: 'Casual Beach Cove Dining Below the Botanical Garden Cliffs',
+    description: 'Nestled between the emerald subtropical cliffs and crystal clear pebble waters of Green Cape. Unbeatable spot for fresh fried Black Sea flounder, cold beer, and churchkhela after exploring the botanical gardens.',
+    signatureDishes: [
+      { name: 'Fresh Fried Black Sea Flounder', priceGEL: 22, note: 'Pan-fried with sea salt, lemon, and spicy green tkemali' },
+      { name: 'Adjarian Cornbread with Sulguni', priceGEL: 8, note: 'Piping hot mchadi stuffed with salty mountain cheese' },
+      { name: 'Local Cucumber & Herb Salad', priceGEL: 9, note: 'Dressed with unrefined Kakhetian sunflower oil' },
+    ],
+    ambiance: ['Pebble Beach Cove', 'Cliffside Greenery', 'Barefoot Breeze', 'Sunset Swim Views'],
+    mustTry: 'Have lunch here right after hiking down from the Botanical Garden.',
+  },
+  {
+    id: 'daiquiri-family-restaurant',
+    name: 'Daiquiri Family Restaurant & Terrace',
+    georgianName: 'დაიკირი',
+    stars: 5,
+    rating: 4.8,
+    reviewsCount: 1470,
+    priceRange: '₾₾ (22 - 45 GEL)',
+    avgPriceGEL: 30,
+    cuisineType: 'Boulevard Seaside Lounge & Seafood Grill',
+    mealTypes: ['Lunch', 'Dinner'],
+    address: '8 Ninoshvili St, Seaside Boulevard',
+    location: '8 Ninoshvili St, Seaside Boulevard',
+    hours: '11:00 – 02:00 Daily',
+    phone: '+995 558 77 11 22',
+    image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Daiquiri+Restaurant+Batumi+Ninoshvili',
+    tagline: 'Sunset Dining Under Coastal Pines with Sea Breeze & Live Music',
+    description: 'An open-air garden terrace set under the tall pines and palms of the original Seaside Boulevard. Famous for fresh Black Sea grilled sea bass, garlic butter mussels, and evening lounge music.',
+    signatureDishes: [
+      { name: 'Whole Grilled Black Sea Bass', priceGEL: 28, note: 'Chargrilled with rosemary and lemon-garlic butter' },
+      { name: 'Black Sea Garlic Steamed Mussels', priceGEL: 21, note: 'Sautéed with white wine, garlic, and fresh dill' },
+      { name: 'Fresh Fruit Daiquiris & Spritzers', priceGEL: 14, note: 'Blended with fresh seasonal Georgian fruits' },
+    ],
+    ambiance: ['Pine Forest Garden', 'Sea Breeze', 'Live Evening Music', 'Chill Lounge'],
+    mustTry: 'Enjoy sunset dinner on the terrace accompanied by smooth evening saxophone or lounge beats.',
+  },
+  {
+    id: 'tavaduri-restaurant',
+    name: 'Tavaduri Nobleman Tavern',
+    georgianName: 'თავადური',
+    stars: 5,
+    rating: 4.8,
+    reviewsCount: 1680,
+    priceRange: '₾₾ (18 - 35 GEL)',
+    avgPriceGEL: 24,
+    cuisineType: 'Noble Georgian Banquet & Adjarian Specialty',
+    mealTypes: ['Lunch', 'Dinner'],
+    address: '38/40 Lermontov St, Batumi',
+    location: '38/40 Lermontov St, Batumi',
+    hours: '11:00 – 00:00 Daily',
+    phone: '+995 422 27 50 50',
+    image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1000&q=80',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Tavaduri+Restaurant+Batumi+Lermontov',
+    tagline: 'Traditional Caucasian Wooden Tavern with Weekend Polyphony',
+    description: 'Richly decorated in the style of an Adjarian nobleman’s hunting lodge with carved wood, antique weapons, and clay vessels. Renowned for spicy veal chashushuli and hearty Supra feasts.',
+    signatureDishes: [
+      { name: 'Chashushuli Spicy Veal in Ketsi', priceGEL: 17, note: 'Tender veal simmered in tomato, garlic, and mountain herbs' },
+      { name: 'Tavaduri Smoked Cheese Plate', priceGEL: 14, note: 'Artisanal selection of Adjarian highland cheeses' },
+      { name: 'Khachapuri on a Spit (Shampurze)', priceGEL: 15, note: 'Sulguni cheese wrapped in dough and grilled over charcoal embers' },
+    ],
+    ambiance: ['Traditional Wood Lodge', 'Weekend Polyphony', 'Warm Supra Spirit', 'Generous Meat Dishes'],
+    mustTry: 'Khachapuri on a spit: stringy melted cheese roasted over glowing coals.',
+  },
+];
+
+const getRestaurantById = (id) => BATUMI_RESTAURANTS.find((r) => r.id === id) || BATUMI_RESTAURANTS[0];
 
 const DISHES = [
   {
@@ -650,299 +1189,47 @@ const DISHES = [
   },
 ];
 
-
 const NEIGHBORHOODS = [
   {
     id: 'old-batumi',
-    name: 'Old Batumi (Historic Quarter)',
+    name: 'Old Batumi',
+    subtitle: 'Historic Quarter',
     tagline: 'Cobblestones, belle-époque balconies & courtyard wine bars',
     distanceToBeach: '300m · 4 min walk',
     vibe: 'Romantic & Bohemian',
-    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80',
-    highlights: ['Piazza Square', 'Europe Square', 'Antique wooden balconies', 'Wine cellars'],
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXdL2ODmT1-Y_zcaFmUEoOKm4WSFZkfyKn6NtPCPcfQO_R3TPSyQB3Iasy&s=10',
+    highlights: ['Piazza Square', 'Europe Square', 'Antique wine cellars'],
     bestFor: 'Couples, history lovers & foodies',
+    airbnbUrl: 'https://www.airbnb.com/s/Old-Batumi--Georgia/homes',
+    bookingUrl: 'https://www.booking.com/searchresults.html?ss=Old+Batumi+Georgia',
   },
   {
     id: 'boulevard',
     name: 'Miracle Park & Boulevard',
+    subtitle: 'Seaside Waterfront',
     tagline: 'Futuristic seaside towers, sea breezes & kinetic sculptures',
     distanceToBeach: 'Direct Waterfront (0m)',
     vibe: 'Modern & Vibrant',
-    image: 'https://images.unsplash.com/photo-1579273166152-d725a4e2b755?auto=format&fit=crop&w=800&q=80',
-    highlights: ['Ali & Nino', 'Alphabet Tower', 'Ferris wheel', 'Batumvelo bike track'],
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrsxCRYiUT0phM8xHLQoV5kSVepktf6caynZvvHBG2eYC_QehvWDj5aPmN&s=10',
+    highlights: ['Ali & Nino', 'Alphabet Tower', 'Batumvelo bike track'],
     bestFor: 'Families, sunset strolls & cyclists',
+    airbnbUrl: 'https://www.airbnb.com/s/Batumi-Boulevard--Georgia/homes',
+    bookingUrl: 'https://www.booking.com/searchresults.html?ss=Batumi+Boulevard+Georgia',
   },
   {
     id: 'green-cape',
-    name: 'Green Cape (Mtsvane Kontskhi)',
+    name: 'Green Cape',
+    subtitle: 'Mtsvane Kontskhi',
     tagline: 'Subtropical cliff greenery & tranquil pebble beach coves',
     distanceToBeach: 'Private Sea Cove (50m)',
     vibe: 'Lush & Peaceful',
-    image: 'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80',
-    highlights: ['Botanical Garden', 'Crystal pebble cove', 'Cliffside seafood', 'Bamboo trails'],
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbEDIF4EAY-ZIyC56XkJjriZ4uCIN8RuZ81ynKB2ZwO48cgz-xyEAEqK1Y&s=10',
+    highlights: ['Botanical Garden', 'Crystal pebble cove', 'Cliffside seafood'],
     bestFor: 'Nature lovers & calm swimming',
+    airbnbUrl: 'https://www.airbnb.com/s/Mtsvane-Kontskhi--Georgia/homes',
+    bookingUrl: 'https://www.booking.com/searchresults.html?ss=Mtsvane+Kontskhi+Batumi+Georgia',
   },
-  {
-    id: 'gonio-sarpi',
-    name: 'Gonio & Sarpi Riviera',
-    tagline: 'Ancient Roman citadel & the clearest Black Sea swimming',
-    distanceToBeach: 'Beachfront Shoreline',
-    vibe: 'Wild Coastal Riviera',
-    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
-    highlights: ['Roman Fortress', 'Sarpi Waterfall border', 'Deep blue water', 'Scuba diving'],
-    bestFor: 'Beach vacationers & road trippers',
-  },
-];
-
-const ACCOMMODATIONS = [
-  {
-    id: 'radisson-blu-batumi',
-    name: 'Radisson Blu Hotel Batumi',
-    type: 'Luxury Hotel',
-    category: 'Hotel',
-    district: 'boulevard',
-    districtName: 'Miracle Park & Boulevard',
-    priceNightGEL: 320,
-    rating: 4.9,
-    reviewsCount: 1420,
-    guestsMax: 3,
-    bedrooms: 1,
-    distanceToBeach: 'Direct Waterfront (0m)',
-    superhost: true,
-    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80',
-    badge: '5-Star Beachfront',
-    address: '1 Ninoshvili St, Batumi Boulevard',
-    mapQuery: 'Radisson Blu Hotel Batumi Ninoshvili',
-    features: ['Panoramic Black Sea Balconies', 'Indoor & Outdoor Pools', 'Clouds Bar on 19th Floor', 'Anne Semonin Spa'],
-    amenitiesList: ['Outdoor Pool', 'Indoor Heated Pool', 'Full Spa & Sauna', 'Sea-view Balcony', 'High-Speed Wi-Fi', '24/7 Room Service', 'Fitness Center', 'Valet Parking'],
-    ratingBreakdown: { cleanliness: 4.9, location: 5.0, communication: 4.9, value: 4.7 },
-    contact: {
-      phone: '+995 422 25 55 55',
-      whatsapp: '+995 599 25 55 55',
-      email: 'info.batumi@radissonblu.com',
-      website: 'https://www.radissonhotels.com/en-us/hotels/radisson-blu-batumi',
-      bookingUrl: 'https://www.booking.com/searchresults.html?ss=Radisson+Blu+Batumi',
-      hostName: 'Radisson Concierge Desk',
-    },
-    description: 'Iconic glass-wave hotel designed by Michele De Lucchi, located right between the seaside boulevard and Miracle Park.',
-  },
-  {
-    id: 'orbi-city-panoramic',
-    name: 'Orbi City High-Floor Panoramic Suites',
-    type: 'Airbnb Seafront Apartment',
-    category: 'Airbnb / Apartment',
-    district: 'boulevard',
-    districtName: 'New Boulevard Seaside',
-    priceNightGEL: 110,
-    rating: 4.88,
-    reviewsCount: 890,
-    guestsMax: 4,
-    bedrooms: 1,
-    distanceToBeach: '50m to Coast',
-    superhost: true,
-    image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1000&q=80',
-    badge: 'Top Airbnb Host',
-    address: '7b Sherif Khimshiashvili St (Tower C, 34th Floor)',
-    mapQuery: 'Orbi City Batumi Sherif Khimshiashvili',
-    features: ['Direct 180° Black Sea Sunset Views', 'Kitchenette & High-Speed Wi-Fi', '200m from Dancing Fountains', 'Keyless Smart Lock'],
-    amenitiesList: ['Private Balcony', 'Full Kitchenette', 'Washing Machine', 'Smart Lock Self Check-in', 'High-Speed Wi-Fi', 'Elevator', 'Air Conditioning', 'Free Parking'],
-    ratingBreakdown: { cleanliness: 4.8, location: 4.9, communication: 5.0, value: 4.9 },
-    contact: {
-      phone: '+995 598 44 12 30',
-      whatsapp: '+995 598 44 12 30',
-      email: 'orbicity.batumi.stay@gmail.com',
-      website: 'https://www.airbnb.com/s/Batumi--Georgia',
-      bookingUrl: 'https://www.airbnb.com/s/Batumi--Georgia/homes?query=Orbi%20City',
-      hostName: 'Giorgi & Natia (Superhost)',
-    },
-    description: 'Modern studio suite on the 34th floor overlooking the open Black Sea horizon and Batumi’s singing fountains.',
-  },
-  {
-    id: 'rooms-hotel-batumi',
-    name: 'Rooms Hotel Batumi (Old Port)',
-    type: 'Boutique Design Hotel',
-    category: 'Boutique',
-    district: 'old-batumi',
-    districtName: 'Old Batumi Historic Quarter',
-    priceNightGEL: 280,
-    rating: 4.92,
-    reviewsCount: 760,
-    guestsMax: 2,
-    bedrooms: 1,
-    distanceToBeach: '100m to Harbor Shore',
-    superhost: true,
-    image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1000&q=80',
-    badge: 'Design Hotels Member',
-    address: '10 Gogebashvili St, Old Port',
-    mapQuery: 'Rooms Hotel Batumi Gogebashvili',
-    features: ['Japanese-Georgian Fusion Rooftop', 'Outdoor Heated Courtyard Pool', 'Vintage Vinyl Lounge', 'Craft Cocktail Bar'],
-    amenitiesList: ['Rooftop Restaurant', 'Courtyard Pool', 'Cocktail Bar', 'Designer Bathrobes', 'Boutique Breakfast', 'Concierge Service', 'Bicycle Rental', 'Record Player in Suite'],
-    ratingBreakdown: { cleanliness: 4.9, location: 4.9, communication: 5.0, value: 4.8 },
-    contact: {
-      phone: '+995 422 24 00 00',
-      whatsapp: '+995 577 24 00 00',
-      email: 'batumi@roomshotels.com',
-      website: 'https://roomshotels.com/batumi/',
-      bookingUrl: 'https://www.booking.com/searchresults.html?ss=Rooms+Hotel+Batumi',
-      hostName: 'Rooms Front Office & Guest Relations',
-    },
-    description: 'Chic seaside industrial aesthetic in Batumi’s maritime harbor quarter with rooftop sunset dining and designer rooms.',
-  },
-  {
-    id: 'old-town-heritage-loft',
-    name: 'Piazza Vintage Heritage Loft with Wooden Balcony',
-    type: 'Airbnb Historic Apartment',
-    category: 'Airbnb / Apartment',
-    district: 'old-batumi',
-    districtName: 'Old Batumi Historic Quarter',
-    priceNightGEL: 135,
-    rating: 4.95,
-    reviewsCount: 430,
-    guestsMax: 4,
-    bedrooms: 2,
-    distanceToBeach: '350m · 5 min walk',
-    superhost: true,
-    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80',
-    badge: 'Superhost Rare Find',
-    address: '14 Mazniashvili St, 2nd Floor, Old Batumi',
-    mapQuery: 'Mazniashvili Street Old Batumi Georgia',
-    features: ['Carved 19th-Century Cedar Balcony', 'High Ceilings & Brick Fireplace', 'Espresso Machine & Wine Fridge', 'Step to Cafes & Piazza'],
-    amenitiesList: ['Carved Wooden Balcony', 'Brick Fireplace', 'Full Kitchen', 'Nespresso Coffee Bar', 'Wine Cooler', 'Washer & Dryer', 'Fast Wi-Fi (150 Mbps)', 'Cobblestone Street Views'],
-    ratingBreakdown: { cleanliness: 5.0, location: 5.0, communication: 5.0, value: 4.9 },
-    contact: {
-      phone: '+995 593 11 88 42',
-      whatsapp: '+995 593 11 88 42',
-      email: 'piazzaloft.batumi@gmail.com',
-      website: 'https://www.airbnb.com/s/Batumi--Georgia',
-      bookingUrl: 'https://www.airbnb.com/s/Batumi--Georgia/homes?query=Piazza%20Old%20Batumi',
-      hostName: 'Tamar Abashidze (Verified Superhost)',
-    },
-    description: 'Restored 1890s townhouse flat with open private balcony overlooking cobblestone courtyards and blooming wisteria.',
-  },
-  {
-    id: 'hilton-batumi-seafront',
-    name: 'Hilton Batumi & Nephele Sky Lounge',
-    type: '5-Star Resort Hotel',
-    category: 'Hotel',
-    district: 'boulevard',
-    districtName: 'Central Boulevard & 6 May Park',
-    priceNightGEL: 310,
-    rating: 4.85,
-    reviewsCount: 1980,
-    guestsMax: 3,
-    bedrooms: 1,
-    distanceToBeach: 'Direct Boulevard Access (50m)',
-    superhost: false,
-    image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=80',
-    badge: 'Beach & Park View',
-    address: '40 Rustaveli Ave, Batumi',
-    mapQuery: 'Hilton Batumi Rustaveli Avenue',
-    features: ['Eforea Luxury Spa & Sauna', 'Rooftop Nephele Lounge Bar', 'Direct Access to Boulevard Park', 'Pet-Friendly Rooms'],
-    amenitiesList: ['Eforea Spa', '20th Floor Sky Lounge', 'Direct Park & Lake Access', 'Indoor Swimming Pool', 'Gym & Sauna', 'Valet Parking', 'Executive Lounge', 'Pet Friendly'],
-    ratingBreakdown: { cleanliness: 4.9, location: 4.9, communication: 4.8, value: 4.7 },
-    contact: {
-      phone: '+995 422 22 22 99',
-      whatsapp: '+995 591 22 22 99',
-      email: 'batumi.info@hilton.com',
-      website: 'https://www.hilton.com/en/hotels/busbahi-hilton-batumi/',
-      bookingUrl: 'https://www.booking.com/searchresults.html?ss=Hilton+Batumi',
-      hostName: 'Hilton Front Desk 24/7',
-    },
-    description: 'Premier seaside avenue address overlooking the Black Sea and Lake Nurigeli, home to Batumi’s beloved sky bar.',
-  },
-  {
-    id: 'green-cape-eco-villa',
-    name: 'Green Cape Subtropical Cliff Villa',
-    type: 'Airbnb Sea-Cliff Eco House',
-    category: 'Villa / Eco-Stay',
-    district: 'green-cape',
-    districtName: 'Green Cape (Mtsvane Kontskhi)',
-    priceNightGEL: 180,
-    rating: 4.96,
-    reviewsCount: 310,
-    guestsMax: 6,
-    bedrooms: 3,
-    distanceToBeach: '5 Min Walk to Pebble Cove',
-    superhost: true,
-    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=80',
-    badge: 'Quiet Nature Retreat',
-    address: 'Mtsvane Kontskhi Cliff Trail 8, Green Cape',
-    mapQuery: 'Mtsvane Kontskhi Batumi Green Cape',
-    features: ['Panoramic Black Sea Sunsets', 'Private Citrus & Kiwi Orchard', '5 Min Walk to Botanical Garden', 'Outdoor BBQ & Hammocks'],
-    amenitiesList: ['Private Botanical Garden Path', 'Outdoor BBQ Terrace', 'Citrus Orchard Hammocks', 'Sea View Deck', 'Full Chef Kitchen', 'Firepit', 'Private Parking', 'Washing Machine'],
-    ratingBreakdown: { cleanliness: 5.0, location: 5.0, communication: 5.0, value: 4.9 },
-    contact: {
-      phone: '+995 571 88 33 00',
-      whatsapp: '+995 571 88 33 00',
-      email: 'greencape.villas.georgia@gmail.com',
-      website: 'https://www.airbnb.com/s/Mtsvane-Kontskhi--Georgia',
-      bookingUrl: 'https://www.airbnb.com/s/Batumi--Georgia/homes?query=Green%20Cape%20Villa',
-      hostName: 'Levan & Lela (Eco Hosts)',
-    },
-    description: 'Wake up to the sounds of waves and eucalyptus trees on the slopes of Green Cape, right beside the world-famous Botanical Garden.',
-  },
-  {
-    id: 'sarpi-azure-cottages',
-    name: 'Sarpi Azure Cliffside Chalets & Suites',
-    type: 'Boutique Beach Resort',
-    category: 'Villa / Eco-Stay',
-    district: 'gonio-sarpi',
-    districtName: 'Gonio & Sarpi Riviera',
-    priceNightGEL: 160,
-    rating: 4.88,
-    reviewsCount: 240,
-    guestsMax: 4,
-    bedrooms: 2,
-    distanceToBeach: 'Direct Beach Access (30m)',
-    superhost: false,
-    image: 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1000&q=80',
-    badge: 'Clearest Sea Water',
-    address: 'Sarpi Coast Highway 12, Sarpi Beach',
-    mapQuery: 'Sarpi Beach Batumi Georgia',
-    features: ['Crystal-Clear Water Beach Access', 'Mountain Stream Freshness', 'Seafood Terrace Restaurant', 'Breathtaking Sunset Deck'],
-    amenitiesList: ['Turquoise Water Beachfront', 'Sun Loungers Included', 'Fresh Seafood Terrace', 'Panoramic Sea Balcony', 'Free Breakfast', 'Snorkeling Gear Available', 'Air Conditioning', 'Free Parking'],
-    ratingBreakdown: { cleanliness: 4.9, location: 5.0, communication: 4.8, value: 4.8 },
-    contact: {
-      phone: '+995 599 07 44 22',
-      whatsapp: '+995 599 07 44 22',
-      email: 'sarpi.azure.resort@gmail.com',
-      website: 'https://www.booking.com/searchresults.html?ss=Sarpi+Georgia',
-      bookingUrl: 'https://www.booking.com/searchresults.html?ss=Sarpi+Beach',
-      hostName: 'Sarpi Azure Hospitality',
-    },
-    description: 'Located at the southern subtropical fringe of Adjara where cliffs meet the transparent turquoise waters of Sarpi.',
-  },
-  {
-    id: 'le-meridien-batumi',
-    name: 'Le Méridien Batumi (Batumi Tower)',
-    type: 'Luxury Landmark Hotel',
-    category: 'Hotel',
-    district: 'boulevard',
-    districtName: 'Miracle Park & Boulevard',
-    priceNightGEL: 340,
-    rating: 4.89,
-    reviewsCount: 1150,
-    guestsMax: 3,
-    bedrooms: 1,
-    distanceToBeach: 'Direct Waterfront (0m)',
-    superhost: false,
-    image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1000&q=80',
-    badge: 'Inside Batumi Tower',
-    address: '1 Ninoshvili St, Batumi Tower',
-    mapQuery: 'Le Meridien Batumi Tower',
-    features: ['Integrated Batumi Tower Ferris Wheel', 'Explore Spa with Turkish Hammam', 'Brasserie Severina', 'Direct Miracle Park Access'],
-    amenitiesList: ['Batumi Tower Observation Access', 'Indoor & Outdoor Pools', 'Explore Spa with Turkish Hammam', 'French-Georgian Brasserie', 'High-speed Wi-Fi', '24/7 Concierge', 'Casino & Lounges', 'Valet Parking'],
-    ratingBreakdown: { cleanliness: 4.9, location: 5.0, communication: 4.9, value: 4.7 },
-    contact: {
-      phone: '+995 422 29 90 90',
-      whatsapp: '+995 595 29 90 90',
-      email: 'info.batumi@lemeridien.com',
-      website: 'https://www.marriott.com/hotels/travel/busmd-le-meridien-batumi/',
-      bookingUrl: 'https://www.booking.com/searchresults.html?ss=Le+Meridien+Batumi',
-      hostName: 'Marriott Bonvoy Concierge',
-    },
-    description: 'Set inside the tallest tower in the Caucasus featuring an iconic mini-ferris wheel embedded in its 27th floor glass facade.',
-  },
+  
 ];
 
 const ITINERARIES = [
@@ -955,9 +1242,27 @@ const ITINERARIES = [
       {
         day: 1,
         title: 'Seaside Icons & Old Town Charm',
-        morning: 'Morning stroll along Boulevard, admire Batumi Lighthouse and Alphabet Tower.',
-        afternoon: 'Wander Old Batumi & Europe Square, savor hot boat-shaped Khachapuri at Retro.',
-        evening: 'Take Argo Cable Car for panoramic sunset, then watch Ali & Nino move at 19:30.',
+        location: 'Miracle Park & Old Town',
+        weather: '☀️ 26°C Sunny Sea Breeze',
+        image: 'https://intranet.infoajara.com/storage/images/6ITaVIHcSAkLAmu2cIH2XyEXZSi1sV3fREZLAvan.jpg',
+        morning: 'Morning stroll along Boulevard, admire Batumi Lighthouse, Astronomical Clock, and Alphabet Tower.',
+        morningMeal: {
+          mealName: 'Morning Breakfast',
+          dishHighlight: 'Boat-shaped Adjarian Khachapuri with molten cheese or Golden Syrniki',
+          restaurantIds: ['retro-khachapuri', 'chocolatte-coffee-room'],
+        },
+        afternoon: 'Wander Old Batumi & Europe Square, browse boutique galleries, and bicycle along coastal palms.',
+        afternoonMeal: {
+          mealName: 'Midday Lunch',
+          dishHighlight: 'Hand-pinched juicy Khinkali broth dumplings or Shkmeruli garlic chicken',
+          restaurantIds: ['heart-of-batumi', 'shemoikhede-genatsvale'],
+        },
+        evening: 'Take Argo Cable Car for panoramic sunset, watch Ali & Nino kinetic statue illumination at 19:30, and enjoy fine wine.',
+        eveningMeal: {
+          mealName: 'Sunset Dinner',
+          dishHighlight: 'Mountain Borano cheese fondue or Fresh pan-roasted Black Sea sea bass',
+          restaurantIds: ['old-boulevard-restaurant', 'fanfan-batumi'],
+        },
         food: 'Adjarian Khachapuri with dry Tsinandali wine',
       },
     ],
@@ -971,25 +1276,79 @@ const ITINERARIES = [
       {
         day: 1,
         title: 'Boulevard & Historic Old Town',
-        morning: 'Explore cobblestone Old Batumi, Piazza, and the Astronomical Clock.',
-        afternoon: 'Rent a Batumvelo bicycle and ride along the 7km coastline under the palms.',
-        evening: 'Sunset drinks at Alphabet Tower followed by Ali & Nino illumination.',
+        location: 'Batumi Boulevard & Piazza',
+        weather: '☀️ 26°C Clear Seaside Skies',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPXTXZAcWEhGhOBhePgY5AbFJlJPnrnDWloXF0CdqUcg&s=10',
+        morning: 'Explore cobblestone Old Batumi, Piazza mosaics, and the German-crafted Astronomical Clock.',
+        morningMeal: {
+          mealName: 'Morning Breakfast',
+          dishHighlight: 'Legendary Titanic boat khachapuri with mountain butter or Cottage cheese syrniki',
+          restaurantIds: ['retro-khachapuri', 'chocolatte-coffee-room'],
+        },
+        afternoon: 'Rent a Batumvelo bicycle and ride along the 7km palm-fringed coastline under the sea breeze.',
+        afternoonMeal: {
+          mealName: 'Midday Lunch',
+          dishHighlight: 'Sizzling Shkmeruli chicken in clay ketsi or hand-twisted Kalakuri Khinkali',
+          restaurantIds: ['heart-of-batumi', 'shemoikhede-genatsvale'],
+        },
+        evening: 'Sunset drinks overlooking Miracle Park followed by Ali & Nino illumination and Old Port walk.',
+        eveningMeal: {
+          mealName: 'Sunset Dinner',
+          dishHighlight: 'Highland Borano fondue with cornbread or Bohemian garden seafood pasta',
+          restaurantIds: ['old-boulevard-restaurant', 'fanfan-batumi'],
+        },
         food: 'Juicy meat Khinkali dumplings with spicy Ajika',
       },
       {
         day: 2,
         title: 'Botanical Wonders & Green Cape',
-        morning: 'Take marshrutka #31 to Batumi Botanical Garden; explore Japanese bamboo groves.',
-        afternoon: 'Swim at Green Cape pebble beach and eat grilled fish by the sea.',
-        evening: 'Argo Cable Car ride to Anuria mountain for traditional Georgian folk dancers.',
+        location: 'Green Cape & Botanical Garden',
+        weather: '🌤️ 24°C Subtropical Coastal Breeze',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEGzov6LA8FnG8HCznKGbhuTycpSwXxDE0e519PliKkSAQZLVC0kj4bfQ9&s=10',
+        morning: 'Take marshrutka #31 or taxi to Batumi Botanical Garden; explore 9 world zones and Japanese bamboo groves.',
+        morningMeal: {
+          mealName: 'Morning Breakfast',
+          dishHighlight: 'Nostalgic honey-walnut crepes or Extra-crispy hollowed-crust boat khachapuri',
+          restaurantIds: ['privet-iz-batuma', 'laguna-cafe'],
+        },
+        afternoon: 'Hike down to Green Cape pebble beach cove and swim in the crystal turquoise Black Sea waves.',
+        afternoonMeal: {
+          mealName: 'Midday Lunch',
+          dishHighlight: 'Freshly pan-fried Black Sea flounder / red mullet (Barabulka) with mchadi cornbread',
+          restaurantIds: ['u-soba-green-cape', 'sanapiro-fish-market'],
+        },
+        evening: 'Ascend Miracle Park into the sky for dinner or relax under Boulevard seaside pines with live music.',
+        eveningMeal: {
+          mealName: 'Sunset Dinner',
+          dishHighlight: '360° revolving sky dining with roasted duck or Black Sea mussels in garlic butter',
+          restaurantIds: ['alphabet-tower-restaurant', 'daiquiri-family-restaurant'],
+        },
         food: 'Black Sea red mullet (Barabulka) with fresh lemon',
       },
       {
         day: 3,
         title: 'Mountain Adjara & Roman Citadel',
-        morning: 'Excursion to Makhuntseti 50m waterfall and 900-year-old Queen Tamar Stone Bridge.',
-        afternoon: 'Wine tasting at Adjarian Wine House in Keda sampling rare Chkhaveri rosé.',
-        evening: 'Visit Gonio Roman Fortress and watch synchronized fountains at Ardagani Lake.',
+        location: 'Makhuntseti Waterfall & Gonio',
+        weather: '🌄 23°C Crisp Mountain Air',
+        image: 'https://www.georgia-spirit.com/images/guides/best-tours-adjara.jpg',
+        morning: 'Scenic highway expedition to 50m Makhuntseti Waterfall and the 900-year-old Queen Tamar arched stone bridge.',
+        morningMeal: {
+          mealName: 'Morning Breakfast',
+          dishHighlight: 'Old Town stone-oven baked khachapuri or specialty espresso with avocado brioche',
+          restaurantIds: ['porto-franco', 'chocolatte-coffee-room'],
+        },
+        afternoon: 'Wine tasting in Keda valley sampling rare royal Chkhaveri rosé and visiting Gonio-Apsaros Roman citadel.',
+        afternoonMeal: {
+          mealName: 'Midday Lunch',
+          dishHighlight: 'Caucasian mountain meat board with pork ribs or Nobleman spicy veal chashushuli',
+          restaurantIds: ['tavaduri-restaurant', 'bern-restaurant'],
+        },
+        evening: 'Return to seaside Batumi for synchronized dancing fountains laser show at Ardagani Lake.',
+        eveningMeal: {
+          mealName: 'Sunset Dinner',
+          dishHighlight: 'Riverside chateau Keda river trout in cornmeal or courtyard roasted pork Ojakhuri',
+          restaurantIds: ['adjarian-wine-house', 'heart-of-batumi'],
+        },
         food: 'Adjarian Sinori pasta with garlic curd and melted butter',
       },
     ],
@@ -1003,41 +1362,131 @@ const ITINERARIES = [
       {
         day: 1,
         title: 'Boulevard Initiation & Miracle Park',
-        morning: 'Check into hotel, walk Miracle Park, and explore Batumi Old Port.',
-        afternoon: 'Piazza Square cafes, European architecture, and boutique craft shops.',
-        evening: 'Sunset watch at Ali & Nino with local beer or wine.',
+        location: 'Boulevard & Miracle Park',
+        weather: '☀️ 26°C Clear Seaside Skies',
+        image: 'https://storage.georgia.travel/images/miracle-park-gnta.webp',
+        morning: 'Check into hotel, walk Miracle Park, and explore Batumi Old Maritime Port.',
+        morningMeal: {
+          mealName: 'Morning Breakfast',
+          dishHighlight: 'Legendary Titanic boat khachapuri with mountain butter or Cottage cheese syrniki',
+          restaurantIds: ['retro-khachapuri', 'chocolatte-coffee-room'],
+        },
+        afternoon: 'Piazza Square cafes, European bell towers, and boutique craft shops.',
+        afternoonMeal: {
+          mealName: 'Midday Lunch',
+          dishHighlight: 'Sizzling Shkmeruli chicken in clay ketsi or hand-pinched Kalakuri Khinkali',
+          restaurantIds: ['heart-of-batumi', 'shemoikhede-genatsvale'],
+        },
+        evening: 'Sunset watch at Ali & Nino with local beer, amber wine, and maritime stroll.',
+        eveningMeal: {
+          mealName: 'Sunset Dinner',
+          dishHighlight: 'Highland Borano cheese fondue or Fresh pan-roasted Black Sea sea bass',
+          restaurantIds: ['old-boulevard-restaurant', 'fanfan-batumi'],
+        },
         food: 'Classic Adjarian Khachapuri',
       },
       {
         day: 2,
         title: 'Batumi Botanical Sanctuary',
-        morning: 'Hike through 9 world phytogeographical zones overlooking turquoise sea.',
-        afternoon: 'Swim and sunbathe at Green Cape cove with churchkhela snacks.',
-        evening: 'Dinner at revolving Alphabet Tower panorama restaurant.',
+        location: 'Green Cape Cliffs',
+        weather: '🌤️ 25°C Subtropical Garden Mist',
+        image: 'https://api.visitbatumi.com/media/images/600x600/12ae2a4360b94b8db21c0d41f5f5c0ea.webp',
+        morning: 'Hike through 9 world phytogeographical zones overlooking turquoise Black Sea waters.',
+        morningMeal: {
+          mealName: 'Morning Breakfast',
+          dishHighlight: 'Morning clay pot spiced lobio beans or Purified crispy-crust boat khachapuri',
+          restaurantIds: ['privet-iz-batuma', 'laguna-cafe'],
+        },
+        afternoon: 'Swim and sunbathe at Green Cape cove with churchkhela and fresh fruit snacks.',
+        afternoonMeal: {
+          mealName: 'Midday Lunch',
+          dishHighlight: 'Fresh pan-fried Black Sea flounder on beach or market dock grilled Turbot',
+          restaurantIds: ['u-soba-green-cape', 'sanapiro-fish-market'],
+        },
+        evening: 'Sunset dinner inside the revolving Alphabet Tower sphere 130m in the air.',
+        eveningMeal: {
+          mealName: 'Sunset Dinner',
+          dishHighlight: '360° rotating sky view duck breast or Seaside pine terrace garlic mussels',
+          restaurantIds: ['alphabet-tower-restaurant', 'daiquiri-family-restaurant'],
+        },
         food: 'Adjarian Borano melted mountain cheese',
       },
       {
         day: 3,
         title: 'Mtirala National Rainforest',
-        morning: 'Adventure through Europe’s wettest subtropical rainforest with suspension bridges.',
-        afternoon: 'Swim in the crystal mountain lake and Tsablnari waterfall.',
-        evening: 'Traditional Supra feast in a wooden village tavern.',
+        location: 'Mtirala Rainforest Gorge',
+        weather: '🌧️ 22°C Emerald Rain & Mist',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBSTv8pPu7agICMkvz67dEV5FEL97-72iVzulTDKVoos4OVrgGEjIcnrk&s=10',
+        morning: 'Adventure through Europe’s wettest subtropical rainforest with suspension bridges and hand-pulled cable cars.',
+        morningMeal: {
+          mealName: 'Morning Breakfast',
+          dishHighlight: 'Stone-oven baked khachapuri with boiled egg or Specialty coffee with avocado toast',
+          restaurantIds: ['porto-franco', 'chocolatte-coffee-room'],
+        },
+        afternoon: 'Swim in the crystal mountain lake and hike to the roaring Tsablnari waterfall.',
+        afternoonMeal: {
+          mealName: 'Midday Lunch',
+          dishHighlight: 'Nobleman spicy veal chashushuli in ketsi or Grand meat board with pork ribs',
+          restaurantIds: ['tavaduri-restaurant', 'bern-restaurant'],
+        },
+        evening: 'Traditional Supra feast in a wooden tavern with mountain wine and polyphony.',
+        eveningMeal: {
+          mealName: 'Sunset Dinner',
+          dishHighlight: 'Keda river trout in cornmeal with garlic coriander sauce or Clay pot pork Ojakhuri',
+          restaurantIds: ['adjarian-wine-house', 'heart-of-batumi'],
+        },
         food: 'Fresh river trout fried with cornbread',
       },
       {
         day: 4,
         title: 'Gonio Roman Citadel & Sarpi Beach',
-        morning: 'Tour Gonio-Apsaros Fortress and examine 2,000-year-old Roman walls.',
-        afternoon: 'Sunbathe at Sarpi beach right next to the border with turquoise water.',
-        evening: 'Night cycling on New Boulevard and laser dancing fountain show.',
+        location: 'Gonio Citadel & Sarpi Coast',
+        weather: '🌊 27°C Turquoise Riviera Sun',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB-7za10tqY2SZkJpidClQgOdvURgH6yoL_V2ANPD5X_23Pyv5IcsGagRE&s=10',
+        morning: 'Tour Gonio-Apsaros Fortress and examine 2,000-year-old Roman citadel walls and museum.',
+        morningMeal: {
+          mealName: 'Morning Breakfast',
+          dishHighlight: 'Purified double-cheese boat khachapuri or Herb omelette with mountain honey',
+          restaurantIds: ['laguna-cafe', 'privet-iz-batuma'],
+        },
+        afternoon: 'Sunbathe at Sarpi beach right next to the cliff border with Georgia’s clearest turquoise water.',
+        afternoonMeal: {
+          mealName: 'Midday Lunch',
+          dishHighlight: 'Fresh Black Sea garlic steamed mussels & barabulka or Hand-pinched juicy Khinkali',
+          restaurantIds: ['sanapiro-fish-market', 'shemoikhede-genatsvale'],
+        },
+        evening: 'Night cycling on New Boulevard and laser dancing fountain show at Ardagani Lake.',
+        eveningMeal: {
+          mealName: 'Sunset Dinner',
+          dishHighlight: 'Grilled whole sea bass with lemon butter or Secret garden seafood risotto',
+          restaurantIds: ['daiquiri-family-restaurant', 'fanfan-batumi'],
+        },
         food: 'Black Sea mussels in garlic cream sauce',
       },
       {
         day: 5,
         title: 'Keda Wine Valley & Sunset Cruise',
-        morning: 'Scenic drive along Acharistskali river gorge and Dandalo bridge.',
-        afternoon: 'Artisan wine tastings at family Marani cellars in Keda.',
-        evening: 'Sunset yacht cruise along Batumi Bay watching dolphins play.',
+        location: 'Keda Wine Hills & Batumi Bay',
+        weather: '🍇 25°C Golden Valley Sun',
+        image: 'https://images.trvl-media.com/lodging/93000000/92560000/92556800/92556762/20f68443.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill',
+        morning: 'Scenic drive along Acharistskali river gorge and Dandalo arched stone bridge.',
+        morningMeal: {
+          mealName: 'Morning Breakfast',
+          dishHighlight: 'Titanic boat khachapuri with cold tarragon soda or Fresh curd syrniki',
+          restaurantIds: ['retro-khachapuri', 'chocolatte-coffee-room'],
+        },
+        afternoon: 'Artisan wine tastings at family Marani cellars in Keda sampling rare Qvevri Chkhaveri rosé.',
+        afternoonMeal: {
+          mealName: 'Midday Lunch',
+          dishHighlight: 'Spit-roasted suckling pig with river trout or Sizzling Sinori pasta in garlic butter',
+          restaurantIds: ['adjarian-wine-house', 'porto-franco'],
+        },
+        evening: 'Sunset yacht cruise along Batumi Bay watching dolphins play in the calm waters.',
+        eveningMeal: {
+          mealName: 'Sunset Dinner',
+          dishHighlight: 'Black Sea sturgeon steak with live grand piano or 360° sky cocktail sunset toast',
+          restaurantIds: ['old-boulevard-restaurant', 'alphabet-tower-restaurant'],
+        },
         food: 'Feast at Adjarian Wine House with rare Qvevri vintages',
       },
     ],
@@ -1065,7 +1514,17 @@ const FAQS = [
 
 export default function App() {
   const [selectedCurrency, setSelectedCurrency] = useState('GEL');
-  const [savedAttractions, setSavedAttractions] = useState(() => [ATTRACTIONS[0], ATTRACTIONS[2]]);
+  const [savedAttractions, setSavedAttractions] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('batumi_saved_places_v2');
+        if (stored) return JSON.parse(stored);
+      } catch {
+        // ignore
+      }
+    }
+    return [];
+  });
   const [searchQuery, setSearchQuery] = useState('');
   const [activeModalAttraction, setActiveModalAttraction] = useState(null);
   const [isTripModalOpen, setIsTripModalOpen] = useState(false);
@@ -1077,8 +1536,6 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [savedDropdownOpen, setSavedDropdownOpen] = useState(false);
 
-  const [stayNights, setStayNights] = useState(1); // Set initial value to 1 (or 0, depending on your needs)
-
   // New interactive Cuisine states
   const [expandedDishId, setExpandedDishId] = useState('adjarian-khachapuri');
   const [showAllDishes, setShowAllDishes] = useState(false);
@@ -1086,11 +1543,99 @@ export default function App() {
   const [visibleAttractionsCount, setVisibleAttractionsCount] = useState(8);
   const [activeModalDish, setActiveModalDish] = useState(null);
 
-  // Accommodations & Where to Stay states
-  const [stayDistrictFilter, setStayDistrictFilter] = useState('All');
-  const [showAllStays, setShowAllStays] = useState(false);
-  const [activeStayInquiry, setActiveStayInquiry] = useState(null);
-  const [inquiryStatus, setInquiryStatus] = useState(null);
+  // Neighborhoods & Districts states
+  const [districtCategoryFilter, setDistrictCategoryFilter] = useState('All');
+  const [activeNeighborhoodModal, setActiveNeighborhoodModal] = useState(null);
+
+  // Authentic Hero Photo switcher and Lightbox
+  
+  const [activePhotoLightbox, setActivePhotoLightbox] = useState(null);
+  const currentHeroImage = USER_PHOTOS.batumiBoulevard;
+  // Restaurant Detail Modal state
+  const [activeModalRestaurant, setActiveModalRestaurant] = useState(null);
+  const [activeCorkDayTab, setActiveCorkDayTab] = useState('all');
+
+  // Live Weather from OpenWeather RapidAPI
+  const [weatherData, setWeatherData] = useState({
+    main: { temp: 66.18, feels_like: 67.21, humidity: 100, pressure: 1009 },
+    weather: [{ main: 'Rain', description: 'light rain', icon: '10n' }],
+    wind: { speed: 6.91 },
+    clouds: { all: 92 },
+    sys: { sunrise: 1790651261, sunset: 1790693998 },
+  });
+  const [weatherLoading, setWeatherLoading] = useState(false);
+  const [lastWeatherFetch, setLastWeatherFetch] = useState(null);
+  const [isWeatherModalOpen, setIsWeatherModalOpen] = useState(false);
+
+  const fetchLiveWeather = async (force = false) => {
+    const CACHE_KEY = 'batumi_weather_cache_v2';
+    const CACHE_TIME_KEY = 'batumi_weather_time_v2';
+    const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes cache to avoid rate limits
+
+    if (!force) {
+      try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+        if (cached && cachedTime && Date.now() - parseInt(cachedTime, 10) < CACHE_TTL_MS) {
+          const parsed = JSON.parse(cached);
+          if (parsed?.main?.temp) {
+            setWeatherData(parsed);
+            setLastWeatherFetch(new Date(parseInt(cachedTime, 10)));
+            return;
+          }
+        }
+      } catch {
+        // ignore cache read error
+      }
+    }
+
+    setWeatherLoading(true);
+    try {
+      const response = await fetch('https://open-weather13.p.rapidapi.com/city?lang=EN&city=batumi', {
+        method: 'GET',
+        headers: {
+          'x-rapidapi-key': 'c9bbd4aea8msh2a77b65c1b84aacp15b208jsnedfa137c515c',
+          'x-rapidapi-host': 'open-weather13.p.rapidapi.com',
+          Accept: 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data && data.main && typeof data.main.temp === 'number') {
+        setWeatherData(data);
+        const now = Date.now();
+        setLastWeatherFetch(new Date(now));
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+          localStorage.setItem(CACHE_TIME_KEY, now.toString());
+        } catch {
+          // ignore
+        }
+      }
+    } catch (err) {
+      console.warn('Weather fetch notice:', err);
+    } finally {
+      setWeatherLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLiveWeather();
+  }, []);
+
+  const rawTempF = weatherData?.main?.temp ?? 66;
+  const tempCelsius = Math.round(((rawTempF - 32) * 5) / 9);
+  const tempFahrenheit = Math.round(rawTempF);
+  const feelsLikeF = weatherData?.main?.feels_like ?? rawTempF;
+  const feelsLikeC = Math.round(((feelsLikeF - 32) * 5) / 9);
+  const weatherConditionDesc = weatherData?.weather?.[0]?.description
+    ? weatherData.weather[0].description.charAt(0).toUpperCase() + weatherData.weather[0].description.slice(1)
+    : 'Light rain';
+  const weatherMain = weatherData?.weather?.[0]?.main || 'Rain';
 
   const speakGeorgian = (text) => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -1116,9 +1661,19 @@ export default function App() {
   };
 
   const toggleSave = (item) => {
-    setSavedAttractions((prev) =>
-      prev.some((p) => p.id === item.id) ? prev.filter((p) => p.id !== item.id) : [...prev, item]
-    );
+    setSavedAttractions((prev) => {
+      const next = prev.some((p) => p.id === item.id)
+        ? prev.filter((p) => p.id !== item.id)
+        : [...prev, item];
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem('batumi_saved_places_v2', JSON.stringify(next));
+        } catch {
+          // ignore
+        }
+      }
+      return next;
+    });
   };
 
   const filteredAttractions = ATTRACTIONS.filter((a) => {
@@ -1147,9 +1702,26 @@ export default function App() {
       <div className="bg-slate-950 text-slate-300 text-xs py-1.5 px-4 border-b border-slate-800">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-4 text-[11px] sm:text-xs">
-            <span className="flex items-center gap-1.5 text-amber-300 font-semibold">
-              <Sun className="w-3.5 h-3.5 animate-spin-slow" /> Batumi Live: 24°C Sunny
-            </span>
+            <button
+              type="button"
+              onClick={() => setIsWeatherModalOpen(true)}
+              className="flex items-center gap-1.5 text-amber-300 hover:text-amber-200 font-semibold cursor-pointer group transition-colors"
+              title="Click to view live Batumi weather report & forecast"
+            >
+              {weatherLoading ? (
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-amber-300" />
+              ) : weatherMain === 'Rain' || weatherMain === 'Drizzle' ? (
+                <CloudRain className="w-3.5 h-3.5 text-cyan-300" />
+              ) : weatherMain === 'Clouds' ? (
+                <Cloud className="w-3.5 h-3.5 text-slate-300" />
+              ) : (
+                <Sun className="w-3.5 h-3.5 animate-spin-slow text-amber-300" />
+              )}
+              <span>
+                Batumi Live: <strong className="text-white font-bold">{tempCelsius}°C</strong> ({tempFahrenheit}°F) • {weatherConditionDesc}
+              </span>
+              <span className="text-[10px] text-amber-400/80 group-hover:text-amber-300 underline underline-offset-2">Details</span>
+            </button>
             <span className="hidden sm:flex items-center gap-1.5 text-cyan-300">
               <Waves className="w-3.5 h-3.5" /> Black Sea: 22°C
             </span>
@@ -1183,9 +1755,11 @@ export default function App() {
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-rose-500 to-amber-500 flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 transition-transform">
-              B
-            </div>
+            <img
+              src={GEORGIA_FLAG_URL}
+              alt="Flag of Georgia"
+              className="w-10 h-10 object-contain rounded-xl shadow-xs group-hover:scale-105 transition-transform shrink-0"
+            />
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="text-xl font-black text-slate-900 font-serif-title">
@@ -1202,7 +1776,7 @@ export default function App() {
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-600">
             <a href="#attractions" className="hover:text-rose-600 transition-colors">Attractions</a>
             <a href="#cuisine" className="hover:text-rose-600 transition-colors">Adjarian Food & Cafes</a>
-            <a href="#neighborhoods" className="hover:text-rose-600 transition-colors">Districts</a>
+            <a href="#neighborhoods" className="hover:text-rose-600 transition-colors">Neighborhoods</a>
             <a href="#itineraries" className="hover:text-rose-600 transition-colors">Plan Board</a>
             <a href="#tips" className="hover:text-rose-600 transition-colors">Traveler Tips</a>
             <a href="#faqs" className="hover:text-rose-600 transition-colors">FAQ</a>
@@ -1300,11 +1874,11 @@ export default function App() {
       </header>
 
       {/* 3. HERO SECTION */}
-      <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden bg-slate-950 text-center text-white px-4 py-20">
+      <section className="relative min-h-[620px] flex items-center justify-center overflow-hidden bg-slate-950 text-center text-white px-4 py-20">
         <img
-          src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2000&q=85"
-          alt="Batumi Coastline"
-          className="absolute inset-0 w-full h-full object-cover filter brightness-50"
+          src={currentHeroImage}
+          alt="Batumi, Georgia"
+          className="absolute inset-0 w-full h-full object-cover filter brightness-50 transition-all duration-700"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-900/40" />
 
@@ -1321,6 +1895,9 @@ export default function App() {
           <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-200 font-light leading-relaxed">
             Where futuristic seaside skyscrapers meet ancient Roman citadels, subtropical bamboo gardens, and authentic Adjarian boat Khachapuri.
           </p>
+
+          {/* User's Authentic Photos Switcher */}
+          
 
           {/* Search box */}
           <div className="max-w-2xl mx-auto bg-white/95 backdrop-blur-md p-2 rounded-2xl shadow-2xl flex flex-col sm:flex-row items-center gap-2">
@@ -1347,18 +1924,7 @@ export default function App() {
           </div>
 
           {/* Quick tags */}
-          <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-300">
-            <span>Trending:</span>
-            {['Ali & Nino', 'Khachapuri', 'Botanical Garden', 'Argo Cable Car', 'Gonio Fortress'].map((tag) => (
-              <button
-                key={tag}
-                onClick={() => { setSearchQuery(tag); document.getElementById('attractions')?.scrollIntoView({ behavior: 'smooth' }); }}
-                className="px-2.5 py-1 rounded-full bg-white/15 hover:bg-white/25 text-white border border-white/20 transition-colors"
-              >
-                {tag}
-              </button>
-            ))}
-          </div>
+         
 
           {/* Fast Credentials Strip */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8 border-t border-white/10 text-left">
@@ -1428,8 +1994,15 @@ export default function App() {
                 >
                   <div className="relative aspect-4/3 overflow-hidden cursor-pointer" onClick={() => setActiveModalAttraction(place)}>
                     <img src={place.image} alt={place.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <div className="absolute top-2.5 left-2.5 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-md text-[10px] text-white font-semibold">
-                      {place.category}
+                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1">
+                      <span className="bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-md text-[10px] text-white font-semibold">
+                        {place.category}
+                      </span>
+                      {place.isUserPhoto && (
+                        <span className="bg-emerald-600/90 backdrop-blur-md px-2 py-0.5 rounded-md text-[10px] text-white font-bold flex items-center gap-1 shadow-xs">
+                          ★ Authentic Photo
+                        </span>
+                      )}
                     </div>
                     <button
                       onClick={(e) => { e.stopPropagation(); toggleSave(place); }}
@@ -1638,30 +2211,64 @@ export default function App() {
                         </div>
 
                         <div className="space-y-1.5">
-                          {(d.venues || []).slice(0, isExpanded ? undefined : 1).map((v, vIdx) => (
-                            <div key={vIdx} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs space-y-1">
-                              <div className="flex items-center justify-between font-bold text-slate-800">
-                                <span>{v.name}</span>
-                                <span className="text-[10px] px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 font-medium">
-                                  {v.type}
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-slate-500">{v.address}</p>
-                              {v.highlight && (
-                                <p className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-medium">
-                                  ★ {v.highlight}
-                                </p>
-                              )}
-                              <a
-                                href={v.mapUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-600 hover:text-rose-700 pt-0.5"
+                          {(d.venues || []).slice(0, isExpanded ? undefined : 1).map((v, vIdx) => {
+                            const matchedRest = BATUMI_RESTAURANTS.find(
+                              (r) =>
+                                r.name.toLowerCase().includes(v.name.toLowerCase().split(' ')[0]) ||
+                                v.name.toLowerCase().includes(r.name.toLowerCase().split(' ')[0])
+                            ) || {
+                              id: v.name.toLowerCase().replace(/\s+/g, '-'),
+                              name: v.name,
+                              georgianName: '',
+                              stars: 5,
+                              rating: 4.8,
+                              reviewsCount: 880,
+                              priceRange: '₾₾ (15 - 30 GEL)',
+                              avgPriceGEL: 20,
+                              cuisineType: v.type || 'Traditional Georgian',
+                              address: v.address,
+                              hours: '10:00 – 23:00 Daily',
+                              phone: '+995 422 27 00 00',
+                              image: d.image,
+                              mapUrl: v.mapUrl,
+                              tagline: v.highlight || 'Top rated dining in Batumi',
+                              description: `Famous spot in Batumi for authentic ${d.name}.`,
+                              signatureDishes: [{ name: d.name, priceGEL: d.avgPriceGEL || 16, note: 'Specialty of the house' }],
+                              ambiance: ['Authentic', 'Local Favorite'],
+                            };
+
+                            return (
+                              <div
+                                key={vIdx}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setActiveModalRestaurant(matchedRest);
+                                }}
+                                className="p-2.5 rounded-xl bg-slate-50 hover:bg-amber-50/50 border border-slate-200/80 hover:border-amber-400 text-xs space-y-1.5 transition-all cursor-pointer group/venue"
                               >
-                                <Navigation className="w-3 h-3" /> View Restaurant on Map
-                              </a>
-                            </div>
-                          ))}
+                                <div className="flex items-center justify-between font-bold text-slate-800">
+                                  <span className="group-hover/venue:text-amber-800 transition-colors">{v.name}</span>
+                                  <span className="text-[10px] px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 font-medium">
+                                    {v.type}
+                                  </span>
+                                </div>
+                                <StarRatingBadge rating={matchedRest.rating} stars={matchedRest.stars} reviewsCount={matchedRest.reviewsCount} size="xs" />
+                                <p className="text-[11px] text-slate-500">{v.address}</p>
+                                {v.highlight && (
+                                  <p className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-medium">
+                                    ★ {v.highlight}
+                                  </p>
+                                )}
+                                <div className="pt-1 flex items-center justify-between text-[11px] font-bold border-t border-slate-200/60">
+                                  <span className="text-amber-700 flex items-center gap-1 group-hover/venue:underline">
+                                    <span>Restaurant Menu & Info</span>
+                                    <ChevronRight className="w-3 h-3" />
+                                  </span>
+                                  <span className="text-slate-400 text-[10px]">Click to view</span>
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
 
                         {d.venues && d.venues.length > 1 && (
@@ -1702,432 +2309,697 @@ export default function App() {
         </div>
       </section>
 
-      {/* 6. WHERE TO STAY & WANDER (AIRBNB, HOTELS, VILLAS & DIRECT CONTACTS) */}
+      {/* 6. NEIGHBORHOODS & DISTRICTS GUIDE */}
       <section id="neighborhoods" className="py-20 bg-gradient-to-b from-stone-50 via-white to-slate-50 border-t border-slate-200 text-slate-900 scroll-mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          {/* Header */}
+          {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <span className="text-xs font-bold text-rose-600 bg-rose-50 px-3.5 py-1 rounded-full uppercase tracking-wider border border-rose-200">
-              Curated Accommodations & Rentals
+              Batumi Quarters & Districts
             </span>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 font-serif-title">
-              Where to Stay in Batumi
+              Batumi Neighborhood Guide
             </h2>
             <p className="text-slate-600 text-sm leading-relaxed">
-              Verified beachfront luxury hotels, high-floor panoramic Airbnb suites, and scenic cliffside villas with direct host contacts, transparent pricing, and instant rental inquiries.
+              From cobblestone historic alleys and vibrant seaside kinetic art promenades to modern dancing fountains and subtropical coastal cliffs — explore the distinctive personality, highlights, and local secrets of each quarter.
             </p>
+
+            {/* Category Filter Pills */}
+            <div className="flex items-center justify-center gap-2 pt-2 flex-wrap">
+              {[
+                { id: 'All', label: 'All Districts (6)' },
+                { id: 'Historic', label: 'Historic & Old Town' },
+                { id: 'Seaside', label: 'Seaside Waterfront' },
+                { id: 'Modern', label: 'Modern Skyline' },
+                { id: 'Nature', label: 'Nature & Coastal Riviera' },
+              ].map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setDistrictCategoryFilter(cat.id)}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    districtCategoryFilter === cat.id
+                      ? 'bg-rose-600 text-white shadow-md'
+                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 shadow-2xs'
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* District Highlights with Beach Proximity */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-slate-900 font-serif-title flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-rose-600" />
-                <span>Filter Stays by Batumi Neighborhood:</span>
-              </h3>
-              {stayDistrictFilter !== 'All' && (
-                <button
-                  type="button"
-                  onClick={() => setStayDistrictFilter('All')}
-                  className="text-xs font-bold text-rose-600 hover:underline cursor-pointer"
-                >
-                  Clear district filter (Show All)
-                </button>
-              )}
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {NEIGHBORHOODS.map((h) => {
-                const isSelected = stayDistrictFilter === h.id;
-                return (
+          {/* Neighborhoods Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {NEIGHBORHOODS.filter((n) => districtCategoryFilter === 'All' || n.category === districtCategoryFilter).map((item) => (
+              <div
+                key={item.id}
+                className="bg-white rounded-3xl border border-slate-200/90 hover:border-slate-300 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-xs hover:shadow-xl group"
+              >
+                <div className="space-y-4">
+                  {/* Image Banner */}
                   <div
-                    key={h.id}
-                    onClick={() => setStayDistrictFilter(isSelected ? 'All' : h.id)}
-                    className={`p-4 rounded-3xl border transition-all cursor-pointer flex flex-col justify-between group ${
-                      isSelected
-                        ? 'bg-rose-50 border-rose-500 shadow-md ring-2 ring-rose-500/20'
-                        : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-md'
-                    }`}
+                    onClick={() => setActiveNeighborhoodModal(item)}
+                    className="relative aspect-16/10 bg-slate-100 overflow-hidden cursor-pointer"
                   >
-                    <div className="space-y-2.5">
-                      <div className="relative aspect-16/9 rounded-xl overflow-hidden bg-slate-100">
-                        <img
-                          src={h.image}
-                          alt={h.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-xs text-white text-[10px] font-bold">
-                          {h.distanceToBeach}
-                        </span>
-                      </div>
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
 
+                    {/* Top Badges */}
+                    <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                      <span className="px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md text-white text-[11px] font-bold">
+                        🌊 {item.distanceToBeach}
+                      </span>
+                      {item.isUserPhoto && (
+                        <span className="px-2 py-1 rounded-lg bg-emerald-600/90 backdrop-blur-md text-white text-[10px] font-bold shadow-xs">
+                          ★ Authentic Photo
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="absolute top-3 right-3">
+                      <span className="px-2.5 py-1 rounded-lg bg-amber-500/95 text-slate-950 text-[11px] font-extrabold shadow-xs">
+                        {item.vibe}
+                      </span>
+                    </div>
+
+                    {/* Bottom Title Overlay */}
+                    <div className="absolute bottom-3 left-4 right-4 text-white flex items-end justify-between gap-2">
                       <div>
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-bold text-sm text-slate-900 group-hover:text-rose-600 transition-colors">
-                            {h.name}
-                          </h4>
-                          <span className="text-[10px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 font-bold whitespace-nowrap">
-                            {h.vibe}
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="text-amber-300 font-serif-title text-sm font-bold">
+                            {item.georgianName}
                           </span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              speakGeorgian(item.georgianName);
+                            }}
+                            className="p-1 rounded-full bg-black/40 hover:bg-black/70 text-amber-300 hover:text-white transition-colors cursor-pointer"
+                            title={`Listen pronunciation of ${item.georgianName}`}
+                          >
+                            <Volume2 className="w-3 h-3" />
+                          </button>
                         </div>
-                        <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
-                          {h.tagline}
+                        <h3 className="font-extrabold text-xl font-serif-title drop-shadow-md text-white">
+                          {item.name}
+                        </h3>
+                        <p className="text-[11px] text-amber-200/90 font-medium">
+                          {item.subtitle}
                         </p>
                       </div>
+                    </div>
+                  </div>
 
-                      <div className="space-y-1 pt-1 border-t border-slate-100 text-[11px] text-slate-600">
-                        {h.highlights.slice(0, 2).map((item, i) => (
-                          <div key={i} className="flex items-center gap-1.5 truncate">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                            <span className="truncate">{item}</span>
+                  {/* Body Content */}
+                  <div className="p-5 pt-0 space-y-3.5">
+                    {/* Tagline */}
+                    <p className="text-xs font-semibold text-slate-900 italic border-l-2 border-rose-500 pl-2.5 leading-snug">
+                      "{item.tagline}"
+                    </p>
+
+                    {/* Description */}
+                    <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                      {item.description}
+                    </p>
+
+                    {/* Sights Highlights */}
+                    <div className="space-y-1.5 pt-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-mono">
+                        Key Sights & Landmarks:
+                      </span>
+                      <div className="grid grid-cols-2 gap-1.5 text-xs">
+                        {item.highlights.map((h, hIdx) => (
+                          <div key={hIdx} className="flex items-center gap-1.5 text-[11px] text-slate-700 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100 truncate">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600 flex-shrink-0" />
+                            <span className="truncate">{h}</span>
                           </div>
                         ))}
                       </div>
                     </div>
 
-                    <div className="pt-3 mt-3 border-t border-slate-100 text-[11px] font-bold flex items-center justify-between">
-                      <span className={isSelected ? 'text-rose-600' : 'text-slate-500 group-hover:text-rose-600'}>
-                        {isSelected ? '✓ Neighborhood Active' : 'Filter stays here'}
+                    {/* Best For Tag */}
+                    <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 text-xs">
+                      <span className="font-bold text-slate-800 text-[11px] block">
+                        ✨ Best for:
                       </span>
+                      <p className="text-[11px] text-slate-600 mt-0.5">
+                        {item.bestFor}
+                      </p>
+                    </div>
+
+                    {/* Local Insider Tip */}
+                    <div className="p-3 rounded-2xl bg-amber-50/80 border border-amber-200/80 text-xs space-y-1">
+                      <span className="font-bold text-amber-900 text-[11px] flex items-center gap-1">
+                        <span>💡 Local Tip:</span>
+                      </span>
+                      <p className="text-[11px] text-amber-950/90 leading-relaxed">
+                        {item.insiderTip}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card Footer Actions */}
+                <div className="p-5 pt-0 space-y-2 border-t border-slate-100 mt-2">
+                  <div className="grid grid-cols-2 gap-2 pt-3">
+                    <button
+                      type="button"
+                      onClick={() => setActiveNeighborhoodModal(item)}
+                      className="py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <span>Full Guide</span>
                       <ChevronRight className="w-3.5 h-3.5" />
-                    </div>
+                    </button>
+
+                    <a
+                      href={item.mapUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="py-2.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs flex items-center justify-center gap-1.5 border border-rose-200 transition-colors"
+                    >
+                      <Navigation className="w-3.5 h-3.5 text-rose-600" />
+                      <span>Google Maps</span>
+                    </a>
                   </div>
-                );
-              })}
-            </div>
-          </div>
 
-          {/* Accommodations Grid (Hotels, Airbnbs, Villas) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {ACCOMMODATIONS.filter((stay) => {
-              const matchesDist = stayDistrictFilter === 'All' || stay.district === stayDistrictFilter;
-              return matchesDist;
-            })
-              .slice(0, showAllStays ? undefined : 4)
-              .map((stay) => {
-                const isSaved = savedAttractions.some((s) => s.id === stay.id);
+                  {/* Vacation search shortcut */}
+                  <div className="grid grid-cols-2 gap-2 text-xs pt-1">
+                    <a
+                      href={item.airbnbUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="py-1.5 px-2 rounded-lg bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200/80 text-[10px] font-semibold flex items-center justify-center gap-1 transition-colors text-center"
+                      title={`Search Airbnb homes in ${item.name}`}
+                    >
+                      <Home className="w-3 h-3 text-rose-500" />
+                      <span>Airbnb Homes</span>
+                      <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                    </a>
 
-                return (
-                  <div
-                    key={stay.id}
-                    className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 hover:border-slate-300 transition-all flex flex-col justify-between group shadow-sm hover:shadow-xl"
-                  >
-                    <div className="space-y-3">
-                      {/* Stay Image with Badges */}
-                      <div className="relative aspect-16/10 overflow-hidden bg-slate-100">
-                        <img
-                          src={stay.image}
-                          alt={stay.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-80" />
-
-                        {/* Top Badges */}
-                        <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 flex-wrap">
-                          <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg text-[10px] text-white font-bold flex items-center gap-1">
-                            {stay.category.includes('Airbnb') ? <Home className="w-3 h-3 text-rose-400" /> : <Hotel className="w-3 h-3 text-amber-400" />}
-                            {stay.type}
-                          </span>
-                          <span className="bg-rose-600 px-2 py-0.5 rounded-md text-[10px] text-white font-bold shadow-xs">
-                            {stay.badge}
-                          </span>
-                        </div>
-
-                        {/* Wishlist Heart Button */}
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleSave(stay);
-                          }}
-                          className={`absolute top-2.5 right-2.5 p-2 rounded-xl backdrop-blur-md transition-all cursor-pointer ${
-                            isSaved
-                              ? 'bg-rose-500 text-white shadow-md'
-                              : 'bg-black/40 text-white hover:bg-black/60'
-                          }`}
-                          title={isSaved ? 'Saved in Trip Plan' : 'Save to Wishlist'}
-                        >
-                          <Heart className="w-4 h-4" fill={isSaved ? 'currentColor' : 'none'} />
-                        </button>
-
-                        {/* Beach & Rating Overlay */}
-                        <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-white text-[11px] drop-shadow-md">
-                          <span className="bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md text-amber-300 font-bold truncate max-w-[150px]">
-                            {stay.distanceToBeach || stay.districtName}
-                          </span>
-                          <span className="flex items-center gap-1 font-bold bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md">
-                            <Star className="w-3 h-3 text-amber-400 fill-amber-400" /> {stay.rating} ({stay.reviewsCount})
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Stay Information */}
-                      <div className="p-4 pt-1 space-y-3">
-                        <div>
-                          <div className="flex items-center justify-between text-[11px] text-slate-500 mb-1">
-                            <span className="font-semibold text-rose-700">{stay.districtName}</span>
-                            <span>Up to {stay.guestsMax} guests • {stay.bedrooms} bed</span>
-                          </div>
-                          <h3 className="font-bold text-base text-slate-900 font-serif-title line-clamp-1 group-hover:text-rose-600 transition-colors">
-                            {stay.name}
-                          </h3>
-                          <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stay.mapQuery || stay.name + ' ' + stay.address)}`}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-[11px] text-slate-500 hover:text-slate-800 flex items-center gap-1 mt-0.5 truncate"
-                          >
-                            <MapPin className="w-3 h-3 text-rose-500 flex-shrink-0" />
-                            <span className="truncate">{stay.address}</span>
-                          </a>
-                        </div>
-
-                        <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-                          {stay.description}
-                        </p>
-
-                        {/* Amenities / Features */}
-                        <div className="space-y-1 pt-1 border-t border-slate-100">
-                          {stay.features.slice(0, 3).map((feat, idx) => (
-                            <div key={idx} className="flex items-center gap-1.5 text-[11px] text-slate-600 truncate">
-                              <CheckCircle2 className="w-3 h-3 text-emerald-600 flex-shrink-0" />
-                              <span className="truncate">{feat}</span>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Nightly Pricing Box */}
-                        <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
-                          <div>
-                            <span className="text-slate-500 text-[10px] block">Nightly rate:</span>
-                            <strong className="text-slate-900 text-sm font-bold">
-                              {formatPrice(stay.priceNightGEL)}
-                            </strong>
-                          </div>
-                          <span className="text-[10px] text-slate-500">
-                            Host: {stay.contact.hostName.split(' ')[0]}
-                          </span>
-                        </div>
-
-                        {/* Direct Contacts & Actions */}
-                        <div className="space-y-2 pt-1">
-                          <div className="grid grid-cols-2 gap-2 text-xs">
-                            {/* Direct Phone Call */}
-                            <a
-                              href={`tel:${stay.contact.phone.replace(/\s+/g, '')}`}
-                              className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold flex items-center justify-center gap-1 text-[11px] transition-colors"
-                            >
-                              <PhoneCall className="w-3 h-3 text-emerald-600" />
-                              <span>Call Host</span>
-                            </a>
-
-                            {/* Direct WhatsApp Message */}
-                            <a
-                              href={`https://wa.me/${stay.contact.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                                `Hello ${stay.contact.hostName}! I found ${stay.name} on the Batumi Tourism Guide. Could you share availability and rates for an upcoming trip?`
-                              )}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="p-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold flex items-center justify-center gap-1 text-[11px] transition-colors shadow-xs"
-                            >
-                              <MessageSquare className="w-3 h-3" />
-                              <span>WhatsApp</span>
-                            </a>
-                          </div>
-
-                          {/* Open Booking Platform or Inquiry */}
-                          <div className="grid grid-cols-2 gap-2 text-xs">
-                            <a
-                              href={stay.contact.bookingUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="p-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-semibold flex items-center justify-center gap-1 text-[11px] transition-colors"
-                            >
-                              <span>{stay.category.includes('Airbnb') ? 'Airbnb Link' : 'Booking.com'}</span>
-                              <ExternalLink className="w-3 h-3 text-slate-400" />
-                            </a>
-
-                            <button
-                              type="button"
-                              onClick={() => { setActiveStayInquiry(stay); setInquiryStatus(null); }}
-                              className="p-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-[11px] transition-colors shadow-xs cursor-pointer"
-                            >
-                              Details & Rent
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <a
+                      href={item.bookingUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="py-1.5 px-2 rounded-lg bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-800 border border-slate-200/80 text-[10px] font-semibold flex items-center justify-center gap-1 transition-colors text-center"
+                      title={`Search Booking.com hotels in ${item.name}`}
+                    >
+                      <Hotel className="w-3 h-3 text-blue-500" />
+                      <span>Booking.com</span>
+                      <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                    </a>
                   </div>
-                );
-              })}
-          </div>
-
-          {/* Toggle Show More Stays */}
-          <div className="text-center pt-2">
-            <button
-              type="button"
-              onClick={() => setShowAllStays(!showAllStays)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 text-xs font-bold shadow-xs transition-all border border-slate-300 hover:border-rose-500 cursor-pointer"
-            >
-              <span>{showAllStays ? 'Show Fewer Accommodations' : `Show More Stays & Airbnbs (${ACCOMMODATIONS.length} Total)`}</span>
-              {showAllStays ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 7. ITINERARIES */}
+      {/* 7. CURATED ITINERARIES & ROUTE PLANNER */}
       <section id="itineraries" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 scroll-mt-16">
+        {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <span className="text-xs font-bold text-rose-600 uppercase">Curated Itineraries</span>
-            <h2 className="text-3xl font-extrabold font-serif-title text-slate-900 mt-1">
+            <span className="text-xs font-bold text-rose-600 bg-rose-50 px-3.5 py-1 rounded-full uppercase tracking-wider border border-rose-200">
+              Curated Itineraries
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 font-serif-title mt-2">
               Your Daily Batumi Route
             </h2>
-            <p className="text-xs text-slate-500">Pick a pre-made plan or customize with your bookmarked sights.</p>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
+              Pick a pre-made plan or customize with your bookmarked sights.
+            </p>
           </div>
 
-          <div className="flex bg-slate-200 p-1 rounded-xl text-xs font-bold">
+          {/* Mode Switcher Tabs */}
+          <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl text-xs font-bold no-print">
             <button
+              type="button"
               onClick={() => setItineraryTab('presets')}
-              className={`px-3 py-1.5 rounded-lg ${itineraryTab === 'presets' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'}`}
+              className={`px-4 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
+                itineraryTab === 'presets'
+                  ? 'bg-rose-600 text-white shadow-md font-bold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              Curated Plans
+              <span>Curated Plans</span>
             </button>
             <button
+              type="button"
               onClick={() => setItineraryTab('custom')}
-              className={`px-3 py-1.5 rounded-lg ${itineraryTab === 'custom' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'}`}
+              className={`px-4 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
+                itineraryTab === 'custom'
+                  ? 'bg-rose-600 text-white shadow-md font-bold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              My Saved Plan ({savedAttractions.length})
+              <Bookmark className={`w-3.5 h-3.5 ${savedAttractions.length > 0 ? 'text-white fill-white' : ''}`} />
+              <span>My Saved Plan ({savedAttractions.length})</span>
             </button>
           </div>
         </div>
 
         {itineraryTab === 'presets' ? (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {ITINERARIES.map((p) => (
+          <div className="space-y-8">
+            {/* Plan Selector Buttons & Print Action */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 no-print">
+              <div className="flex flex-wrap items-center gap-3">
+                {ITINERARIES.map((p) => {
+                  const isSelected = selectedPlanId === p.id;
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setSelectedPlanId(p.id)}
+                      className={`p-3.5 sm:px-5 rounded-2xl text-left transition-all cursor-pointer border ${
+                        isSelected
+                          ? 'bg-rose-600 text-white border-rose-600 shadow-md ring-2 ring-rose-600/20'
+                          : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                      }`}
+                    >
+                      <span className={`text-[10px] uppercase font-bold tracking-wider block ${isSelected ? 'text-rose-100' : 'text-slate-400'}`}>
+                        {p.durationDays} Day Plan
+                      </span>
+                      <h4 className="font-extrabold text-sm font-serif-title mt-0.5">
+                        {p.title}
+                      </h4>
+                      <p className={`text-[11px] mt-0.5 line-clamp-1 max-w-[220px] ${isSelected ? 'text-rose-100' : 'text-slate-500'}`}>
+                        {p.tagline}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="flex items-center gap-2 self-start sm:self-auto no-print">
                 <button
-                  key={p.id}
-                  onClick={() => setSelectedPlanId(p.id)}
-                  className={`p-4 rounded-2xl border text-left cursor-pointer transition-all ${
-                    selectedPlanId === p.id ? 'bg-white border-rose-500 ring-2 ring-rose-500/20' : 'bg-white border-slate-200'
-                  }`}
+                  type="button"
+                  onClick={() => window.print()}
+                  className="px-4 py-2.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 font-bold text-xs shadow-xs flex items-center gap-2 transition-colors cursor-pointer"
+                  title="Print Itinerary"
                 >
-                  <span className="text-xs font-bold text-rose-600">{p.durationDays} Day Plan</span>
-                  <h4 className="font-bold text-sm text-slate-900 mt-0.5">{p.title}</h4>
-                  <p className="text-xs text-slate-500 mt-1">{p.tagline}</p>
+                  <Printer className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Print Plan</span>
                 </button>
-              ))}
+              </div>
             </div>
 
-            <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-6">
-              <div className="flex justify-between items-center pb-4 border-b border-slate-100">
-                <div>
-                  <h3 className="text-xl font-bold font-serif-title">{currentPlan.title}</h3>
-                  <p className="text-xs text-slate-500">{currentPlan.tagline}</p>
-                </div>
-                <button
-                  onClick={() => window.print()}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700"
+            {/* Day Cards */}
+            <div className="space-y-6">
+              {currentPlan.days.map((d) => (
+                <div
+                  key={d.day}
+                  className="itinerary-day-card bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-5 sm:p-7 space-y-5"
                 >
-                  <Printer className="w-3.5 h-3.5" /> Print
-                </button>
-              </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    {/* Left: Clean Photo */}
+                    <div className="lg:col-span-4">
+                     
 
-              <div className="space-y-6">
-                {currentPlan.days.map((d) => (
-                  <div key={d.day} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="w-7 h-7 rounded-lg bg-rose-600 text-white font-bold text-xs flex items-center justify-center">
-                        D{d.day}
-                      </span>
-                      <h4 className="font-bold text-sm text-slate-900">{d.title}</h4>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-                      <div className="p-3 bg-white rounded-xl border border-slate-200">
-                        <strong className="text-amber-600 block mb-1">Morning</strong>
-                        <p className="text-slate-600">{d.morning}</p>
+
+
+
+
+
+
+
+<div
+  style={{
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '4 / 3',
+    borderRadius: '1rem',
+    overflow: 'hidden',
+    background: '#0f172a',
+    boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+  }}
+>
+  <img
+    src={d.image}
+    alt={d.title}
+    style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+    }}
+  />
+  <span
+  style={{
+    position: 'absolute',
+    left: '0.75rem',
+    bottom: '0.75rem',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.375rem',
+    padding: '0.375rem 0.75rem',
+    borderRadius: '0.5rem',
+    background: 'rgba(0, 0, 0, 0.35)',
+    backdropFilter: 'blur(10px)',
+    color: '#ffffff',
+    fontSize: '0.75rem',
+    fontWeight: 600,
+    boxShadow: '0 4px 6px -1px rgba(185, 183, 183, 0.1)',
+  }}
+>
+    📍 {d.location}
+  </span>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    {/* Right: Day Breakdown */}
+                    <div className="lg:col-span-8 space-y-4">
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                        <div className="flex items-center gap-3">
+                          <span className="px-3 py-1 rounded-xl bg-rose-50 text-rose-700 text-xs font-extrabold border border-rose-200">
+                            D{d.day}
+                          </span>
+                          <h3 className="text-xl sm:text-2xl font-bold font-serif-title text-slate-900">
+                            {d.title}
+                          </h3>
+                        </div>
+                        <span className="text-xs text-slate-500 font-medium">
+                          📍 {d.location}
+                        </span>
                       </div>
-                      <div className="p-3 bg-white rounded-xl border border-slate-200">
-                        <strong className="text-rose-600 block mb-1">Afternoon</strong>
-                        <p className="text-slate-600">{d.afternoon}</p>
+
+                      {/* 3 Day Phases: Morning, Afternoon, Evening */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                        <div className="p-3.5 bg-amber-50/70 rounded-2xl border border-amber-100 space-y-1">
+                          <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider block">
+                            🌅 Morning
+                          </span>
+                          <p className="text-slate-600 leading-relaxed">
+                            {d.morning}
+                          </p>
+                        </div>
+
+                        <div className="p-3.5 bg-rose-50/70 rounded-2xl border border-rose-100 space-y-1">
+                          <span className="text-[10px] font-bold text-rose-800 uppercase tracking-wider block">
+                            ☀️ Afternoon
+                          </span>
+                          <p className="text-slate-600 leading-relaxed">
+                            {d.afternoon}
+                          </p>
+                        </div>
+
+                        <div className="p-3.5 bg-indigo-50/70 rounded-2xl border border-indigo-100 space-y-1">
+                          <span className="text-[10px] font-bold text-indigo-800 uppercase tracking-wider block">
+                            🌙 Evening
+                          </span>
+                          <p className="text-slate-600 leading-relaxed">
+                            {d.evening}
+                          </p>
+                        </div>
                       </div>
-                      <div className="p-3 bg-white rounded-xl border border-slate-200">
-                        <strong className="text-indigo-600 block mb-1">Evening</strong>
-                        <p className="text-slate-600">{d.evening}</p>
+
+                      {/* Meal & Dining highlights with 2 verified restaurants per meal */}
+                      {(d.morningMeal || d.afternoonMeal || d.eveningMeal) && (
+                        <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-3.5">
+                          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/70 pb-2.5">
+                            <span className="font-bold text-xs sm:text-sm text-slate-900 flex items-center gap-2">
+                              <Utensils className="w-4 h-4 text-amber-600" />
+                              <span>Verified Dining Spots for Day {d.day} (2 Top Places Per Meal)</span>
+                            </span>
+                            <span className="text-[11px] text-slate-500 font-medium">Click any venue for phone, directions & menu</span>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                            {/* Morning Meal (Breakfast) */}
+                            {d.morningMeal && (
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[11px] font-extrabold text-amber-800 uppercase tracking-wider flex items-center gap-1">
+                                    <span>☕</span> Breakfast Spots
+                                  </span>
+                                  <span className="text-[10px] text-slate-400 font-medium">2 Venues</span>
+                                </div>
+                                <div className="space-y-2">
+                                  {d.morningMeal.restaurantIds?.map((id, rIdx) => {
+                                    const r = getRestaurantById(id);
+                                    if (!r) return null;
+                                    return (
+                                      <div
+                                        key={r.id}
+                                        onClick={() => setActiveModalRestaurant(r)}
+                                        className="p-2.5 rounded-xl bg-white border border-slate-200 hover:border-amber-400 hover:shadow-sm transition-all cursor-pointer group space-y-1"
+                                      >
+                                        <div className="flex items-center justify-between gap-1">
+                                          <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded">
+                                            Pick {rIdx + 1}
+                                          </span>
+                                          <span className="text-[10px] font-bold text-slate-500">{r.priceRange.split(' ')[0]}</span>
+                                        </div>
+                                        <h5 className="font-bold text-xs text-slate-900 group-hover:text-rose-600 transition-colors truncate">
+                                          {r.name}
+                                        </h5>
+                                        <div className="flex items-center justify-between text-[11px]">
+                                          <StarRatingBadge rating={r.rating} stars={r.stars || 5} reviewsCount={r.reviewsCount} size="xs" />
+                                          <span className="text-[10px] text-slate-400 truncate max-w-[85px]">{r.address.split(',')[0]}</span>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Midday Meal (Lunch) */}
+                            {d.afternoonMeal && (
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[11px] font-extrabold text-rose-800 uppercase tracking-wider flex items-center gap-1">
+                                    <span>🍲</span> Lunch Spots
+                                  </span>
+                                  <span className="text-[10px] text-slate-400 font-medium">2 Venues</span>
+                                </div>
+                                <div className="space-y-2">
+                                  {d.afternoonMeal.restaurantIds?.map((id, rIdx) => {
+                                    const r = getRestaurantById(id);
+                                    if (!r) return null;
+                                    return (
+                                      <div
+                                        key={r.id}
+                                        onClick={() => setActiveModalRestaurant(r)}
+                                        className="p-2.5 rounded-xl bg-white border border-slate-200 hover:border-rose-400 hover:shadow-sm transition-all cursor-pointer group space-y-1"
+                                      >
+                                        <div className="flex items-center justify-between gap-1">
+                                          <span className="text-[10px] font-bold text-rose-800 bg-rose-50 px-1.5 py-0.5 rounded">
+                                            Pick {rIdx + 1}
+                                          </span>
+                                          <span className="text-[10px] font-bold text-slate-500">{r.priceRange.split(' ')[0]}</span>
+                                        </div>
+                                        <h5 className="font-bold text-xs text-slate-900 group-hover:text-rose-600 transition-colors truncate">
+                                          {r.name}
+                                        </h5>
+                                        <div className="flex items-center justify-between text-[11px]">
+                                          <StarRatingBadge rating={r.rating} stars={r.stars || 5} reviewsCount={r.reviewsCount} size="xs" />
+                                          <span className="text-[10px] text-slate-400 truncate max-w-[85px]">{r.address.split(',')[0]}</span>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Sunset Meal (Dinner) */}
+                            {d.eveningMeal && (
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[11px] font-extrabold text-indigo-800 uppercase tracking-wider flex items-center gap-1">
+                                    <span>🍷</span> Dinner Spots
+                                  </span>
+                                  <span className="text-[10px] text-slate-400 font-medium">2 Venues</span>
+                                </div>
+                                <div className="space-y-2">
+                                  {d.eveningMeal.restaurantIds?.map((id, rIdx) => {
+                                    const r = getRestaurantById(id);
+                                    if (!r) return null;
+                                    return (
+                                      <div
+                                        key={r.id}
+                                        onClick={() => setActiveModalRestaurant(r)}
+                                        className="p-2.5 rounded-xl bg-white border border-slate-200 hover:border-indigo-400 hover:shadow-sm transition-all cursor-pointer group space-y-1"
+                                      >
+                                        <div className="flex items-center justify-between gap-1">
+                                          <span className="text-[10px] font-bold text-indigo-800 bg-indigo-50 px-1.5 py-0.5 rounded">
+                                            Pick {rIdx + 1}
+                                          </span>
+                                          <span className="text-[10px] font-bold text-slate-500">{r.priceRange.split(' ')[0]}</span>
+                                        </div>
+                                        <h5 className="font-bold text-xs text-slate-900 group-hover:text-rose-600 transition-colors truncate">
+                                          {r.name}
+                                        </h5>
+                                        <div className="flex items-center justify-between text-[11px]">
+                                          <StarRatingBadge rating={r.rating} stars={r.stars || 5} reviewsCount={r.reviewsCount} size="xs" />
+                                          <span className="text-[10px] text-slate-400 truncate max-w-[85px]">{r.address.split(',')[0]}</span>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 🍽️ Meal Highlight */}
+                      <div className="p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-950 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="text-base">🍽️</span>
+                          <span>
+                            <strong className="font-extrabold text-amber-900">Meal Highlight:</strong> {d.food}
+                          </span>
+                        </div>
+                        <a
+                          href="#cuisine"
+                          className="text-amber-800 font-bold hover:text-amber-950 hover:underline flex items-center gap-1 self-end sm:self-auto"
+                        >
+                          <span>View recipe & culinary traditions</span>
+                          <span>&rarr;</span>
+                        </a>
                       </div>
-                    </div>
-                    <div className="text-xs text-amber-900 bg-amber-50 p-2.5 rounded-xl border border-amber-200">
-                      🍽️ <strong>Meal Highlight:</strong> {d.food}
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          /* Custom Saved Plan */
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
               <div>
-                <h3 className="text-xl font-bold font-serif-title text-slate-900">Personal Travel Plan Board</h3>
-                <p className="text-xs text-slate-500">Your personalized itinerary board with direct directions and travel notes.</p>
+                <h3 className="text-xl font-bold font-serif-title text-slate-900">
+                  Personalized Batumi Trip Plan
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Your bookmarked sights and restaurants ready to trace your route.
+                </p>
               </div>
-              <div className="flex items-center gap-2">
+
+              <div className="flex items-center gap-2 no-print">
                 <button
+                  type="button"
                   onClick={() => window.print()}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold"
+                  className="px-4 py-2.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 font-bold text-xs shadow-xs flex items-center gap-2 transition-colors cursor-pointer"
                 >
-                  <Printer className="w-3.5 h-3.5" /> Print Board
+                  <Printer className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Print Plan</span>
                 </button>
                 {savedAttractions.length > 0 && (
                   <button
-                    onClick={() => setSavedAttractions([])}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold"
+                    type="button"
+                    onClick={() => {
+                      setSavedAttractions([]);
+                      if (typeof window !== 'undefined') {
+                        try {
+                          localStorage.removeItem('batumi_saved_places_v2');
+                        } catch {
+                          // ignore
+                        }
+                      }
+                    }}
+                    className="px-3.5 py-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
-                    <Trash2 className="w-3.5 h-3.5" /> Clear All
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Clear Plan</span>
                   </button>
                 )}
               </div>
             </div>
 
             {savedAttractions.length === 0 ? (
-              <div className="py-12 text-center space-y-3 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-                <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
-                  <Bookmark className="w-6 h-6" />
+              <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 space-y-4">
+                <div className="w-14 h-14 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
+                  <Bookmark className="w-7 h-7" />
                 </div>
-                <h4 className="font-bold text-sm text-slate-800">Your Plan Board is Empty</h4>
-                <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                  Click the bookmark button on any attraction or visit spot above to pin it to your personal travel plan board.
-                </p>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-base">Your Trip Plan is Empty</h4>
+                  <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                    Browse the attractions, sights, and cafes above and click the bookmark button to build your personalized Batumi itinerary.
+                  </p>
+                </div>
                 <a
                   href="#attractions"
-                  className="inline-block mt-2 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-sm"
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition-colors"
                 >
-                  Browse Attractions
+                  <span>Browse Batumi Sights</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
                 </a>
               </div>
             ) : (
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {savedAttractions.map((place, idx) => (
-                    <div key={place.id} className="p-3.5 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-200 flex flex-col justify-between text-xs space-y-3 transition-colors">
-                      <div className="flex items-start gap-2.5">
-                        <span className="w-6 h-6 rounded-lg bg-rose-600 text-white font-bold flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5">
-                          {idx + 1}
-                        </span>
-                        <img src={place.image} alt={place.name} className="w-12 h-12 rounded-xl object-cover flex-shrink-0 shadow-xs" />
-                        <div className="min-w-0 flex-1">
-                          <p className="font-bold text-slate-900 truncate">{place.name}</p>
-                          <p className="text-[10px] text-amber-600 font-medium">{place.georgianName}</p>
-                          <p className="text-[10px] text-slate-500 truncate flex items-center gap-1 mt-0.5">
-                            <MapPin className="w-3 h-3 text-slate-400 flex-shrink-0" /> {place.location}
-                          </p>
+                    <div
+                      key={place.id}
+                      className="itinerary-day-card bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="relative aspect-16/10 overflow-hidden bg-slate-100">
+                          <img
+                            src={place.image}
+                            alt={place.name}
+                            className="w-full h-full object-cover"
+                          />
+                          <span className="absolute top-2.5 left-2.5 w-6 h-6 rounded-md bg-rose-600 text-white font-bold text-[10px] flex items-center justify-center shadow-xs">
+                            #{idx + 1}
+                          </span>
+                          {place.category && (
+                            <span className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs text-white text-[10px] font-semibold">
+                              {place.category}
+                            </span>
+                          )}
+                        </div>
+                        {/* Location name directly underneath the bottom of the photo with 0 margin/padding */}
+                        <p
+                          className="text-[11px] text-slate-500 flex items-center gap-1 bg-slate-50 px-3 py-1 border-b border-slate-100 truncate"
+                          style={{ margin: 0 }}
+                        >
+                          <MapPin className="w-3 h-3 text-rose-500 shrink-0" />
+                          <span className="truncate">{place.location}</span>
+                        </p>
+
+                        <div className="p-4 space-y-1">
+                          <h4 className="font-bold text-sm text-slate-900 truncate font-serif-title">
+                            {place.name}
+                          </h4>
+                          {place.georgianName && (
+                            <p className="text-[11px] text-amber-700 font-semibold truncate">
+                              {place.georgianName}
+                            </p>
+                          )}
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between pt-2 border-t border-slate-200/80 text-[11px]">
+                      <div className="p-4 pt-0 border-t border-slate-100 flex items-center justify-between text-xs mt-2 no-print">
                         <a
                           href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
                             place.coords?.query || `${place.name} Batumi Georgia`
@@ -2136,29 +3008,33 @@ export default function App() {
                           rel="noreferrer"
                           className="inline-flex items-center gap-1 font-bold text-rose-600 hover:text-rose-700"
                         >
-                          <Navigation className="w-3 h-3" /> Directions
+                          <Navigation className="w-3 h-3" />
+                          <span>Google Maps</span>
                         </a>
                         <button
+                          type="button"
                           onClick={() => toggleSave(place)}
-                          className="text-slate-400 hover:text-rose-600 font-medium flex items-center gap-1"
+                          className="text-slate-400 hover:text-rose-600 font-semibold flex items-center gap-1 transition-colors cursor-pointer"
                         >
-                          <Trash2 className="w-3.5 h-3.5" /> Remove
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Remove</span>
                         </button>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="pt-2 space-y-2">
-                  <label className="block text-xs font-bold text-slate-800">
-                    Travel Notes & Checklist (Hotel, dates, booking numbers):
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                    Trip Notes & Checklist (Flight times, hotel address, packing):
                   </label>
                   <textarea
                     value={tripNotes}
                     onChange={(e) => setTripNotes(e.target.value)}
-                    placeholder="e.g. Day 1: Arrive Batumi train station 13:00 -> Check into Old Boulevard Hotel -> Sunset drinks at Alphabet tower..."
-                    rows={3}
-                    className="w-full p-3 rounded-2xl border border-slate-200 text-xs focus:outline-hidden focus:border-rose-500 bg-slate-50"
+                    placeholder="e.g. Day 1: Arrive Batumi train station 13:00 -> Check into hotel -> Sunset drinks at Alphabet tower..."
+                    rows={4}
+                    style={{ padding: '14px 18px', lineHeight: '1.6', minHeight: '110px' }}
+                    className="w-full rounded-2xl border border-slate-300 text-sm focus:outline-hidden focus:ring-2 focus:ring-rose-500/20 text-slate-900 bg-white"
                   />
                 </div>
               </div>
@@ -2225,7 +3101,7 @@ export default function App() {
             </div>
             <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-center">
               <span className="text-[10px] text-slate-500">Estimated Total:</span>
-              <p className="text-xl font-black text-rose-900 font-serif-title">
+              <p className="text-xl font-bold text-rose-900 font-sans tracking-tight">
                 {calcAmount} {fromCurr} = {calcConverted()} {CURRENCY_RATES[toCurr]?.symbol} {toCurr}
               </p>
             </div>
@@ -2259,7 +3135,11 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-rose-600 text-white font-bold flex items-center justify-center">B</div>
+              <img
+                src={GEORGIA_FLAG_URL}
+                alt="Flag of Georgia"
+                className="w-8 h-8 object-contain rounded-lg shadow-xs shrink-0"
+              />
               <span className="text-base font-bold text-white font-serif-title">Batumigeorgia.com</span>
             </div>
             <div className="flex gap-4">
@@ -2350,212 +3230,192 @@ export default function App() {
       {/* MODAL: FOOD DISH TASTING & LOCAL EATING GUIDE */}
       {activeModalDish && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-xs overflow-y-auto"
           onClick={() => setActiveModalDish(null)}
         >
           <div
-            className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-slate-200 text-xs no-scrollbar shadow-2xl"
+            className="bg-white rounded-3xl max-w-md w-full max-h-[82vh] overflow-hidden border border-slate-200 text-xs shadow-2xl flex flex-col my-auto relative animate-in fade-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header Image */}
-            <div className="relative aspect-16/9 bg-slate-900 overflow-hidden">
+            {/* Header Image - Sleek & Compact */}
+            <div className="relative h-32 sm:h-36 w-full bg-slate-900 shrink-0 overflow-hidden">
               <img
                 src={activeModalDish.image}
                 alt={activeModalDish.name}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/20" />
 
+              {/* Close Button */}
               <button
                 type="button"
                 onClick={() => setActiveModalDish(null)}
-                className="absolute top-3 right-3 p-2 rounded-full bg-black/60 text-white hover:bg-black/80 transition-colors cursor-pointer"
+                className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors cursor-pointer shadow-md z-10"
                 title="Close"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3.5 h-3.5" />
               </button>
 
-              <div className="absolute bottom-4 left-5 right-5 text-white">
-                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                  <span className="px-2.5 py-0.5 rounded-md bg-amber-500 text-black font-extrabold text-[10px] uppercase">
+              <div className="absolute bottom-2.5 left-3.5 right-3.5 text-white">
+                <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
+                  <span className="px-2 py-0.2 rounded-md bg-amber-500 text-black font-extrabold text-[9px] uppercase">
                     {activeModalDish.category}
                   </span>
                   {activeModalDish.isVeg && (
-                    <span className="px-2.5 py-0.5 rounded-md bg-emerald-600 text-white font-bold text-[10px]">
+                    <span className="px-2 py-0.2 rounded-md bg-emerald-600 text-white font-bold text-[9px]">
                       Vegetarian
                     </span>
                   )}
-                  <span className="px-2.5 py-0.5 rounded-md bg-white/20 backdrop-blur-xs text-white text-[10px]">
-                    📍 {activeModalDish.origin || 'Adjara Region'}
+                  <span className="text-[10px] text-amber-200">
+                    📍 {activeModalDish.origin || 'Adjara'}
                   </span>
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold font-serif-title drop-shadow-md">
+                <h3 className="text-base sm:text-lg font-bold font-serif-title drop-shadow-md line-clamp-1">
                   {activeModalDish.name}
                 </h3>
-                <div className="flex items-center gap-3 mt-1 text-xs text-amber-200">
-                  <span className="font-semibold text-sm">{activeModalDish.georgianName}</span>
+                <div className="flex items-center gap-1.5 text-[11px] text-amber-200">
+                  <span className="font-semibold">{activeModalDish.georgianName}</span>
                   {activeModalDish.pronunciation && (
-                    <span className="italic opacity-90">({activeModalDish.pronunciation})</span>
+                    <span className="italic opacity-85 text-[10px]">({activeModalDish.pronunciation})</span>
                   )}
                 </div>
               </div>
             </div>
 
-            <div className="p-6 space-y-5">
+            <div className="p-4 overflow-y-auto space-y-3 max-h-[calc(82vh-140px)]">
               {/* Pronunciation Audio & Price Banner */}
-              <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/90 flex flex-wrap items-center justify-between gap-3">
+              <div className="p-2.5 rounded-xl bg-amber-50/90 border border-amber-200 flex items-center justify-between gap-2">
                 <button
                   type="button"
                   onClick={() => speakGeorgian(activeModalDish.georgianName)}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-[11px] shadow-xs transition-colors cursor-pointer"
                 >
-                  <Volume2 className="w-4 h-4" />
-                  <span>Pronounce in Georgian</span>
+                  <Volume2 className="w-3 h-3" />
+                  <span>Pronounce</span>
                 </button>
 
                 <div className="text-right">
-                  <span className="text-[10px] text-slate-500 block">Average Tavern Price:</span>
-                  <span className="text-base font-extrabold text-amber-900">
+                  <span className="text-[10px] text-slate-500 mr-1">Avg Price:</span>
+                  <strong className="text-xs font-bold text-amber-900 font-sans tracking-tight">
                     ~{formatPrice(activeModalDish.avgPriceGEL || 14)}
-                  </span>
+                  </strong>
                 </div>
               </div>
 
-              {/* Description & Flavor */}
-              <div className="space-y-2">
-                <p className="text-slate-700 leading-relaxed text-xs sm:text-sm">
-                  {activeModalDish.description}
-                </p>
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 space-y-1">
-                  <p>
-                    <strong className="text-slate-900">Flavor Profile:</strong> {activeModalDish.flavorProfile}
-                  </p>
-                  {activeModalDish.pairing && (
-                    <p className="text-amber-800">
-                      <strong>Recommended Beverage:</strong> {activeModalDish.pairing}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Step-by-Step Local Eating Ritual */}
+              {/* Step-by-Step Local Eating Ritual - Clean, Clear, Focused */}
               {activeModalDish.eatingGuide && activeModalDish.eatingGuide.length > 0 && (
-                <div className="space-y-3 pt-2 border-t border-slate-100">
-                  <div className="flex items-center gap-2">
-                    <Utensils className="w-4 h-4 text-amber-600" />
-                    <h4 className="font-bold text-slate-900 text-xs sm:text-sm font-serif-title">
-                      How to Eat Like a Local (The Authentic Ritual)
-                    </h4>
-                  </div>
-                  <div className="space-y-2">
+                <div className="p-3 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50/60 border border-amber-200 space-y-2">
+                  <h4 className="font-bold text-amber-950 text-xs flex items-center gap-1.5">
+                    <Utensils className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                    <span>How to Eat This Meal (Local Way):</span>
+                  </h4>
+                  <div className="space-y-1.5">
                     {activeModalDish.eatingGuide.map((step, idx) => (
                       <div
                         key={idx}
-                        className="p-3 rounded-xl bg-amber-50/50 border border-amber-200/60 flex items-start gap-3"
+                        className="p-2 rounded-xl bg-white/90 border border-amber-200/70 flex items-start gap-2 shadow-2xs"
                       >
-                        <span className="w-5 h-5 rounded-full bg-amber-600 text-white font-extrabold text-[11px] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="w-4 h-4 rounded-full bg-amber-600 text-white font-extrabold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
                           {idx + 1}
                         </span>
-                        <p className="text-slate-700 text-xs leading-relaxed">{step}</p>
+                        <p className="text-slate-800 text-[11px] leading-relaxed font-medium">{step}</p>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Ingredients List */}
-              {activeModalDish.ingredients && (
-                <div className="space-y-2 pt-2 border-t border-slate-100">
-                  <h4 className="font-bold text-slate-900 text-xs">Authentic Key Ingredients:</h4>
-                  <div className="flex flex-wrap gap-1.5">
-                    {activeModalDish.ingredients.map((ing, i) => (
-                      <span
-                        key={i}
-                        className="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-medium"
-                      >
-                        {ing}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
+              {/* Description & Flavor Note */}
+              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 space-y-1">
+                <p className="leading-relaxed">{activeModalDish.description}</p>
+                <p><strong className="text-slate-800">Flavor:</strong> {activeModalDish.flavorProfile}</p>
+              </div>
 
-              {/* Best Restaurants Serving This Dish */}
+              {/* Best Place Serving This Dish */}
               {activeModalDish.venues && activeModalDish.venues.length > 0 && (
-                <div className="space-y-3 pt-2 border-t border-slate-100">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-bold text-slate-900 text-xs sm:text-sm flex items-center gap-1.5 font-serif-title">
-                      <MapPin className="w-4 h-4 text-rose-600" />
-                      <span>Top Rated Taverns & Bakeries for this Dish:</span>
-                    </h4>
-                    <span className="text-[11px] text-slate-400 font-semibold">
-                      {activeModalDish.venues.length} verified spots
+                <div className="space-y-1.5 pt-1 border-t border-slate-100">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="font-bold text-slate-800 flex items-center gap-1">
+                      <MapPin className="w-3 h-3 text-rose-600" />
+                      <span>Where to Eat:</span>
                     </span>
+                    <span className="text-[10px] text-slate-400 font-medium">Top recommendation</span>
                   </div>
 
-                  <div className="space-y-2">
-                    {activeModalDish.venues.map((venue, vIdx) => (
-                      <div
-                        key={vIdx}
-                        className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
-                      >
-                        <div className="space-y-0.5">
-                          <div className="flex items-center gap-2">
-                            <strong className="text-slate-900 text-xs">{venue.name}</strong>
-                            <span className="px-2 py-0.2 rounded-md bg-amber-100 text-amber-800 text-[10px] font-semibold">
-                              {venue.type}
-                            </span>
-                          </div>
-                          <p className="text-slate-500 text-[11px]">{venue.address}</p>
-                          {venue.highlight && (
-                            <p className="text-emerald-700 text-[11px] font-medium">
-                              ★ {venue.highlight}
-                            </p>
-                          )}
-                        </div>
+                  <div className="space-y-1.5">
+                    {activeModalDish.venues.slice(0, 2).map((venue, vIdx) => {
+                      const matchedRest = BATUMI_RESTAURANTS.find(
+                        (r) =>
+                          r.name.toLowerCase().includes(venue.name.toLowerCase().split(' ')[0]) ||
+                          venue.name.toLowerCase().includes(r.name.toLowerCase().split(' ')[0])
+                      );
 
-                        <a
-                          href={venue.mapUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-rose-600 border border-rose-200 font-bold text-[11px] flex items-center justify-center gap-1.5 transition-colors whitespace-nowrap"
+                      return (
+                        <div
+                          key={vIdx}
+                          className="p-2 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2 text-xs"
                         >
-                          <Navigation className="w-3.5 h-3.5" />
-                          <span>Google Maps</span>
-                          <ExternalLink className="w-3 h-3 ml-0.5 text-rose-400" />
-                        </a>
-                      </div>
-                    ))}
+                          <div className="min-w-0">
+                            <span className="font-bold text-slate-900 block truncate text-[11px]">{venue.name}</span>
+                            <span className="text-slate-500 text-[10px] truncate block">{venue.address}</span>
+                          </div>
+
+                          <div className="flex items-center gap-1 shrink-0">
+                            {matchedRest && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setActiveModalDish(null);
+                                  setActiveModalRestaurant(matchedRest);
+                                }}
+                                className="px-2 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 font-bold text-[10px] cursor-pointer"
+                              >
+                                Menu
+                              </button>
+                            )}
+                            <a
+                              href={venue.mapUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="p-1 rounded-lg bg-white hover:bg-slate-100 text-rose-600 border border-rose-200 text-[10px] font-bold inline-flex items-center"
+                              title="Directions"
+                            >
+                              <Navigation className="w-3 h-3" />
+                            </a>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
               {/* Action Buttons: Save to Trip Board */}
-              <div className="pt-3 border-t border-slate-100 flex items-center gap-3">
+              <div className="pt-2 border-t border-slate-100 flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => toggleSave(activeModalDish)}
-                  className={`flex-1 py-3 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  className={`flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                     savedAttractions.some((s) => s.id === activeModalDish.id)
                       ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                      : 'bg-rose-600 hover:bg-rose-700 text-white shadow-md'
+                      : 'bg-rose-600 hover:bg-rose-700 text-white shadow-xs'
                   }`}
                 >
                   <Heart
-                    className="w-4 h-4"
+                    className="w-3.5 h-3.5"
                     fill={savedAttractions.some((s) => s.id === activeModalDish.id) ? 'currentColor' : 'none'}
                   />
                   <span>
                     {savedAttractions.some((s) => s.id === activeModalDish.id)
                       ? 'Saved in Food Bucket List'
-                      : 'Add to My Food Bucket List'}
+                      : 'Save Dish to List'}
                   </span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setActiveModalDish(null)}
-                  className="px-5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
                 >
                   Close
                 </button>
@@ -2565,208 +3425,560 @@ export default function App() {
         </div>
       )}
 
-      {/* MODAL: RENT INQUIRY & CONTACT HOST */}
-      {activeStayInquiry && (
+      {/* MODAL: NEIGHBORHOOD & DISTRICT DETAIL GUIDE */}
+      {activeNeighborhoodModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs"
-          onClick={() => setActiveStayInquiry(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-xs overflow-y-auto"
+          onClick={() => setActiveNeighborhoodModal(null)}
         >
           <div
-            className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-slate-200 text-xs no-scrollbar shadow-2xl"
+            className="bg-white rounded-3xl max-w-xl w-full max-h-[88vh] overflow-hidden border border-slate-200 shadow-2xl flex flex-col my-auto relative animate-in fade-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative aspect-16/9 bg-slate-900">
-              <img src={activeStayInquiry.image} alt={activeStayInquiry.name} className="w-full h-full object-cover" />
+            {/* Modal Top Bar */}
+            <div className="flex items-center justify-between px-5 py-3 border-b border-slate-100 bg-white shrink-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full bg-rose-50 border border-rose-200 text-rose-700 font-bold text-xs flex items-center gap-1">
+                  <MapPin className="w-3 h-3 text-rose-600" />
+                  <span>{activeNeighborhoodModal.category} District</span>
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold text-xs">
+                  🌊 {activeNeighborhoodModal.distanceToBeach}
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-xs">
+                  {activeNeighborhoodModal.vibe}
+                </span>
+              </div>
+
               <button
                 type="button"
-                onClick={() => setActiveStayInquiry(null)}
-                className="absolute top-3 right-3 p-1.5 rounded-full bg-black/60 text-white hover:bg-black/80 transition-colors cursor-pointer"
+                onClick={() => setActiveNeighborhoodModal(null)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                title="Close"
               >
                 <X className="w-4 h-4" />
               </button>
-              <div className="absolute bottom-3 left-4 right-4 text-white">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="px-2 py-0.5 rounded-md bg-rose-600 text-[10px] font-bold">
-                    {activeStayInquiry.badge}
-                  </span>
-                  <span className="px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs text-[10px] font-semibold text-amber-300">
-                    {activeStayInquiry.distanceToBeach || activeStayInquiry.districtName}
-                  </span>
+            </div>
+
+            {/* Scrollable Content Body */}
+            <div className="p-5 sm:p-6 overflow-y-auto max-h-[calc(88vh-60px)] space-y-4">
+              {/* Banner Image */}
+              <div className="relative h-44 sm:h-52 rounded-2xl overflow-hidden bg-slate-900 shadow-sm shrink-0">
+                <img
+                  src={activeNeighborhoodModal.image}
+                  alt={activeNeighborhoodModal.name}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+
+                <div className="absolute bottom-3 left-4 right-4 text-white">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-amber-300 font-serif-title text-base sm:text-lg font-bold">
+                      {activeNeighborhoodModal.georgianName}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => speakGeorgian(activeNeighborhoodModal.georgianName)}
+                      className="p-1 rounded-full bg-black/50 hover:bg-black/80 text-amber-300 hover:text-white transition-colors cursor-pointer"
+                      title="Pronounce Georgian name"
+                    >
+                      <Volume2 className="w-3.5 h-3.5" />
+                    </button>
+                    {activeNeighborhoodModal.pronunciation && (
+                      <span className="text-white/80 font-mono text-xs">
+                        ({activeNeighborhoodModal.pronunciation})
+                      </span>
+                    )}
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-black font-serif-title drop-shadow-sm">
+                    {activeNeighborhoodModal.name}
+                  </h2>
+                  <p className="text-xs text-amber-200/95 font-medium mt-0.5">
+                    {activeNeighborhoodModal.subtitle}
+                  </p>
                 </div>
-                <h3 className="text-lg font-bold font-serif-title drop-shadow-md">
-                  {activeStayInquiry.name}
-                </h3>
-                <p className="text-[11px] text-slate-200">
-                  {activeStayInquiry.districtName} • {formatPrice(activeStayInquiry.priceNightGEL)} / night
+              </div>
+
+              {/* Quick Actions Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <a
+                  href={activeNeighborhoodModal.mapUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="py-2.5 px-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors cursor-pointer"
+                >
+                  <Navigation className="w-3.5 h-3.5" />
+                  <span>Google Maps</span>
+                  <ExternalLink className="w-3 h-3 text-rose-200" />
+                </a>
+
+                <a
+                  href={activeNeighborhoodModal.airbnbUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <Home className="w-3.5 h-3.5 text-rose-600" />
+                  <span>Airbnb Rentals</span>
+                  <ExternalLink className="w-3 h-3 text-slate-400" />
+                </a>
+
+                <a
+                  href={activeNeighborhoodModal.bookingUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="py-2.5 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer border border-blue-200"
+                >
+                  <Hotel className="w-3.5 h-3.5 text-blue-600" />
+                  <span>Booking.com</span>
+                  <ExternalLink className="w-3 h-3 text-blue-400" />
+                </a>
+              </div>
+
+              {/* Tagline Callout */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs">
+                <span className="font-bold text-slate-500 uppercase tracking-wider text-[10px] block font-mono">
+                  District Character:
+                </span>
+                <p className="font-bold text-slate-900 text-sm mt-0.5 font-serif-title">
+                  "{activeNeighborhoodModal.tagline}"
+                </p>
+                <p className="text-slate-600 text-xs mt-2 leading-relaxed">
+                  {activeNeighborhoodModal.description}
+                </p>
+              </div>
+
+              {/* Highlights & Top Sights */}
+              <div className="space-y-2">
+                <h4 className="font-bold text-slate-900 text-xs sm:text-sm font-serif-title flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-rose-600" />
+                  <span>Top Sights & Things to Do in this District</span>
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {activeNeighborhoodModal.highlights.map((h, i) => (
+                    <div
+                      key={i}
+                      className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center gap-2 text-xs"
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span className="font-semibold text-slate-800">{h}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Best For Tag */}
+              <div className="p-3 rounded-2xl bg-rose-50/80 border border-rose-200/80 text-xs space-y-0.5">
+                <span className="font-bold text-rose-900 text-xs flex items-center gap-1">
+                  <span>✨ Recommended For:</span>
+                </span>
+                <p className="text-rose-950 text-xs leading-relaxed">
+                  {activeNeighborhoodModal.bestFor}
+                </p>
+              </div>
+
+              {/* Local Insider Tip */}
+              <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs space-y-1">
+                <span className="font-bold text-amber-900 uppercase tracking-wider text-[10px] block font-mono">
+                  💡 Resident Insider Secret:
+                </span>
+                <p className="text-amber-950 italic leading-relaxed text-xs">
+                  "{activeNeighborhoodModal.insiderTip}"
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      )}
 
-            <div className="p-6 space-y-4">
-              {/* Trip Duration Cost Calculation */}
-              <div className="p-3.5 rounded-2xl bg-rose-50/70 border border-rose-200 flex items-center justify-between text-xs">
-                <div>
-                  <span className="text-[11px] text-slate-600 block">
-                    Estimated Total for {stayNights} {stayNights === 1 ? 'Night' : 'Nights'}:
-                  </span>
-                  <strong className="text-base text-rose-700 font-extrabold">
-                    {formatPrice(activeStayInquiry.priceNightGEL * stayNights)}
-                  </strong>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => setStayNights(Math.max(1, stayNights - 1))}
-                    className="w-7 h-7 rounded-lg bg-white border border-rose-200 text-rose-700 font-bold hover:bg-rose-100 flex items-center justify-center text-xs"
-                  >
-                    -
-                  </button>
-                  <span className="px-2 text-xs font-bold text-slate-800">{stayNights}n</span>
-                  <button
-                    type="button"
-                    onClick={() => setStayNights(Math.min(30, stayNights + 1))}
-                    className="w-7 h-7 rounded-lg bg-white border border-rose-200 text-rose-700 font-bold hover:bg-rose-100 flex items-center justify-center text-xs"
-                  >
-                    +
-                  </button>
+      {/* MODAL: RESTAURANT & DINING DETAIL PAGE */}
+      {activeModalRestaurant && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-xs overflow-y-auto"
+          onClick={() => setActiveModalRestaurant(null)}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-xl sm:max-w-2xl w-full max-h-[88vh] overflow-hidden border border-slate-200 shadow-2xl flex flex-col my-auto relative animate-in fade-in zoom-in-95 duration-150"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Top Bar */}
+            <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-slate-100 bg-white shrink-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-900 font-bold text-xs flex items-center gap-1">
+                  <Utensils className="w-3 h-3 text-amber-600" />
+                  <span>{activeModalRestaurant.cuisineType}</span>
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-[11px]">
+                  ✓ Verified Venue
+                </span>
+                <StarRatingBadge
+                  rating={activeModalRestaurant.rating}
+                  stars={activeModalRestaurant.stars || 5}
+                  reviewsCount={activeModalRestaurant.reviewsCount}
+                  size="xs"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setActiveModalRestaurant(null)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                title="Close"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Scrollable Content Body */}
+            <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(88vh-60px)] space-y-4">
+              {/* Hero Banner - Compact & Well-proportioned */}
+              <div className="relative h-40 sm:h-48 rounded-2xl overflow-hidden bg-slate-900 shadow-sm shrink-0">
+                <img
+                  src={activeModalRestaurant.image}
+                  alt={activeModalRestaurant.name}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+
+                <div className="absolute bottom-3 left-4 right-4 text-white flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1 flex-wrap text-xs">
+                      <span className="text-amber-300 font-bold bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md text-[11px]">
+                        {activeModalRestaurant.priceRange}
+                      </span>
+                      <span className="text-white/90 flex items-center gap-1 bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md text-[11px]">
+                        <Clock className="w-3 h-3 text-amber-400" />
+                        {activeModalRestaurant.hours}
+                      </span>
+                    </div>
+                    <div className="flex items-baseline gap-2 flex-wrap">
+                      <h2 className="text-xl sm:text-2xl font-black font-serif-title drop-shadow-sm">
+                        {activeModalRestaurant.name}
+                      </h2>
+                      {activeModalRestaurant.georgianName && (
+                        <span className="text-amber-300 font-serif-title text-sm sm:text-base font-bold">
+                          {activeModalRestaurant.georgianName}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 text-amber-400 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border border-amber-400/40 text-xs self-start sm:self-auto shrink-0">
+                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    <span className="font-extrabold text-white text-xs">
+                      {activeModalRestaurant.rating} ({activeModalRestaurant.reviewsCount} reviews)
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              {/* Host Contact Strip */}
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                <div className="flex items-center justify-between text-slate-900 font-bold">
-                  <span className="flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    Host: {activeStayInquiry.contact.hostName}
-                  </span>
-                  <span className="text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 font-semibold">
-                    Verified Host
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-600 pt-1">
-                  <div className="flex items-center gap-1.5">
-                    <PhoneCall className="w-3.5 h-3.5 text-rose-600 flex-shrink-0" />
-                    <span>{activeStayInquiry.contact.phone}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5 text-sky-600 flex-shrink-0" />
-                    <span className="truncate">{activeStayInquiry.contact.email}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Fast Connect Buttons */}
-              <div className="grid grid-cols-2 gap-2.5">
+              {/* Quick Actions Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <a
-                  href={`tel:${activeStayInquiry.contact.phone.replace(/\s+/g, '')}`}
-                  className="p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold flex items-center justify-center gap-2 text-center"
+                  href={`tel:${activeModalRestaurant.phone}`}
+                  className="py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
                 >
-                  <PhoneCall className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Call Now</span>
+                  <PhoneCall className="w-3.5 h-3.5" />
+                  <span>Call ({activeModalRestaurant.phone})</span>
                 </a>
+
                 <a
-                  href={`https://wa.me/${activeStayInquiry.contact.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                    `Hello ${activeStayInquiry.contact.hostName}! I found your property (${activeStayInquiry.name}) on the Batumi Tourism Guide. Could you tell me about availability for ${stayNights} nights?`
-                  )}`}
+                  href={activeModalRestaurant.mapUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="p-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold flex items-center justify-center gap-2 text-center shadow-xs"
+                  className="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  <span>Chat WhatsApp</span>
+                  <Navigation className="w-3.5 h-3.5 text-rose-600" />
+                  <span>Google Maps</span>
+                  <ExternalLink className="w-3 h-3 text-slate-400" />
                 </a>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    toggleSave({
+                      id: activeModalRestaurant.id,
+                      name: activeModalRestaurant.name,
+                      georgianName: activeModalRestaurant.georgianName,
+                      category: 'Tavern & Dining',
+                      location: activeModalRestaurant.address,
+                      image: activeModalRestaurant.image,
+                      coords: { query: activeModalRestaurant.name + ' Batumi Georgia' },
+                    });
+                  }}
+                  className={`py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer border ${
+                    savedAttractions.some((s) => s.id === activeModalRestaurant.id)
+                      ? 'bg-rose-50 text-rose-700 border-rose-200'
+                      : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
+                  }`}
+                >
+                  <Bookmark className="w-3.5 h-3.5" fill={savedAttractions.some((s) => s.id === activeModalRestaurant.id) ? 'currentColor' : 'none'} />
+                  <span>
+                    {savedAttractions.some((s) => s.id === activeModalRestaurant.id)
+                      ? '✓ In My Saved Plan'
+                      : 'Pin to Saved Plan'}
+                  </span>
+                </button>
               </div>
 
-              {/* Amenities Grid */}
-              {activeStayInquiry.amenitiesList && (
-                <div className="pt-2 border-t border-slate-100 space-y-2">
-                  <h4 className="font-bold text-slate-900 text-xs">Included Amenities:</h4>
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {activeStayInquiry.amenitiesList.map((am, i) => (
-                      <div key={i} className="flex items-center gap-1.5 text-[11px] text-slate-600">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                        <span className="truncate">{am}</span>
+              {/* Tagline Callout */}
+              <div className="p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200/90 flex items-start gap-2.5">
+                <span className="text-xl shrink-0">🏆</span>
+                <div className="space-y-0.5">
+                  <h4 className="font-bold text-amber-950 text-xs sm:text-sm">
+                    {activeModalRestaurant.tagline}
+                  </h4>
+                  <p className="text-xs text-amber-900/80 leading-relaxed">
+                    {activeModalRestaurant.description}
+                  </p>
+                </div>
+              </div>
+
+              {/* Signature Dishes Menu */}
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm font-serif-title flex items-center gap-1.5">
+                    <Utensils className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Signature Dishes & Menu Highlights</span>
+                  </h4>
+                  <span className="text-[10px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-md">
+                    Prices in GEL (₾)
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {activeModalRestaurant.signatureDishes?.map((dish, dIdx) => (
+                    <div
+                      key={dIdx}
+                      className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-start justify-between gap-2 text-xs"
+                    >
+                      <div className="space-y-0.5 min-w-0">
+                        <span className="font-bold text-slate-900 text-xs block truncate">
+                          {dish.name}
+                        </span>
+                        <p className="text-slate-500 text-[11px] leading-tight line-clamp-2">
+                          {dish.note}
+                        </p>
                       </div>
-                    ))}
-                  </div>
+                      <span className="font-extrabold text-amber-900 bg-amber-100 px-2 py-0.5 rounded-lg text-xs shrink-0 whitespace-nowrap">
+                        ~{dish.priceGEL} ₾
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Food Critic Insider Tip */}
+              {activeModalRestaurant.mustTry && (
+                <div className="p-3.5 rounded-2xl bg-gradient-to-r from-rose-50 to-amber-50 border border-rose-200/80 text-xs space-y-1">
+                  <span className="font-bold text-rose-800 uppercase tracking-wider text-[10px] block font-mono">
+                    💡 Food Critic Tasting Guide:
+                  </span>
+                  <p className="text-slate-700 italic leading-relaxed text-xs">
+                    "{activeModalRestaurant.mustTry}"
+                  </p>
                 </div>
               )}
 
-              {/* Interactive In-App Message Dispatch */}
-              <div className="pt-2 border-t border-slate-100 space-y-3">
-                <h4 className="font-bold text-slate-900 text-xs">Direct Rental Request to Host</h4>
-                {inquiryStatus === 'sent' ? (
-                  <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-center space-y-1">
-                    <CheckCircle2 className="w-6 h-6 text-emerald-600 mx-auto" />
-                    <p className="font-bold text-xs">Inquiry Sent Successfully!</p>
-                    <p className="text-[11px] text-emerald-700">The host will review your dates and contact you via phone/WhatsApp within 2 hours.</p>
+              {/* Location & Details Strip */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-rose-600 shrink-0" />
+                  <div>
+                    <span className="font-bold text-slate-900 block">{activeModalRestaurant.address}</span>
+                    <span className="text-slate-500 text-[11px]">{activeModalRestaurant.hours}</span>
                   </div>
-                ) : (
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      setInquiryStatus('sent');
-                    }}
-                    className="space-y-2.5"
-                  >
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <label className="block text-[10px] font-bold text-slate-600 mb-0.5">Your Name:</label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="e.g. Alex"
-                          className="w-full p-2 rounded-xl border border-slate-200 bg-slate-50 focus:outline-hidden"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-bold text-slate-600 mb-0.5">Phone / WhatsApp:</label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="+995 / +1..."
-                          className="w-full p-2 rounded-xl border border-slate-200 bg-slate-50 focus:outline-hidden"
-                        />
-                      </div>
-                    </div>
+                </div>
 
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <label className="block text-[10px] font-bold text-slate-600 mb-0.5">Estimated Check-In:</label>
-                        <input
-                          type="date"
-                          className="w-full p-2 rounded-xl border border-slate-200 bg-slate-50 text-[11px] focus:outline-hidden"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-bold text-slate-600 mb-0.5">Guests:</label>
-                        <select className="w-full p-2 rounded-xl border border-slate-200 bg-slate-50 text-[11px] focus:outline-hidden">
-                          <option>1-2 Guests</option>
-                          <option>3-4 Guests (Family)</option>
-                          <option>5+ Guests (Group)</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-[10px] font-bold text-slate-600 mb-0.5">Notes or Special Requests:</label>
-                      <textarea
-                        rows={2}
-                        placeholder="e.g. High floor ocean view, baby crib needed, late check-in at 22:00..."
-                        className="w-full p-2 rounded-xl border border-slate-200 bg-slate-50 text-[11px] focus:outline-hidden"
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="w-full py-3 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold shadow-md cursor-pointer transition-all"
-                    >
-                      Send Booking & Rental Inquiry
-                    </button>
-                  </form>
+                {activeModalRestaurant.ambiance && (
+                  <div className="flex flex-wrap gap-1">
+                    {activeModalRestaurant.ambiance.slice(0, 3).map((tag, tIdx) => (
+                      <span key={tIdx} className="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600 text-[10px] font-medium">
+                        ✓ {tag}
+                      </span>
+                    ))}
+                  </div>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: LIVE BATUMI WEATHER REPORT */}
+      {isWeatherModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-xs overflow-y-auto"
+          onClick={() => setIsWeatherModalOpen(false)}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-md w-full overflow-hidden border border-slate-200 shadow-2xl flex flex-col my-auto relative animate-in fade-in zoom-in-95 duration-150"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Bar */}
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 bg-slate-50/80 shrink-0">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="font-bold text-xs text-slate-800 uppercase tracking-wider font-mono">
+                  Live Weather Feed • Batumi, GE 🇬🇪
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsWeatherModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-white hover:bg-slate-200 text-slate-600 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer shadow-xs"
+                title="Close"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-5">
+              {/* Primary Temp Hero */}
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 text-white relative overflow-hidden shadow-md">
+                <div className="relative z-10 flex items-center justify-between">
+                  <div>
+                    <span className="text-xs text-amber-300 font-bold uppercase tracking-wider">
+                      Current Live Conditions
+                    </span>
+                    <div className="flex items-baseline gap-2 mt-1">
+                      <span className="text-4xl sm:text-5xl font-extrabold font-serif-title tracking-tight text-white">
+                        {tempCelsius}°C
+                      </span>
+                      <span className="text-xl text-slate-300 font-medium">
+                        / {tempFahrenheit}°F
+                      </span>
+                    </div>
+                    <p className="text-sm text-cyan-200 font-medium mt-1">
+                      {weatherConditionDesc} • Feels like {feelsLikeC}°C ({Math.round(feelsLikeF)}°F)
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-amber-300">
+                    {weatherMain === 'Rain' || weatherMain === 'Drizzle' ? (
+                      <CloudRain className="w-10 h-10 text-cyan-300" />
+                    ) : weatherMain === 'Clouds' ? (
+                      <Cloud className="w-10 h-10 text-slate-200" />
+                    ) : (
+                      <Sun className="w-10 h-10 text-amber-300 animate-spin-slow" />
+                    )}
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-300">
+                  <span>📍 Black Sea Coast (41.64° N, 41.64° E)</span>
+                  <span className="text-emerald-300 font-semibold">● OpenWeather Live</span>
+                </div>
+              </div>
+
+              {/* Weather Metrics Grid */}
+              <div className="grid grid-cols-2 gap-2.5 text-xs">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                  <span className="text-slate-500 text-[11px] block">💧 Humidity</span>
+                  <strong className="text-base text-slate-900 font-bold block mt-0.5">
+                    {weatherData?.main?.humidity ?? 100}%
+                  </strong>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                  <span className="text-slate-500 text-[11px] block">💨 Wind Speed</span>
+                  <strong className="text-base text-slate-900 font-bold block mt-0.5">
+                    {weatherData?.wind?.speed ?? 6.9} mph
+                    <span className="text-[11px] text-slate-500 font-normal ml-1">
+                      ({Math.round((weatherData?.wind?.speed ?? 6.9) * 1.60934)} km/h)
+                    </span>
+                  </strong>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                  <span className="text-slate-500 text-[11px] block">☁️ Cloud Cover</span>
+                  <strong className="text-base text-slate-900 font-bold block mt-0.5">
+                    {weatherData?.clouds?.all ?? 92}%
+                  </strong>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                  <span className="text-slate-500 text-[11px] block">🧭 Atmospheric Pressure</span>
+                  <strong className="text-base text-slate-900 font-bold block mt-0.5">
+                    {weatherData?.main?.pressure ?? 1009} hPa
+                  </strong>
+                </div>
+              </div>
+
+              {/* Daylight / Sea note */}
+              <div className="p-3 rounded-xl bg-cyan-50/80 border border-cyan-200/80 flex items-center justify-between text-xs text-cyan-950">
+                <div className="flex items-center gap-2">
+                  <Waves className="w-4 h-4 text-cyan-600 shrink-0" />
+                  <span>Sea Temperature: <strong className="font-bold text-cyan-900">~22°C</strong> (Batumi Bay)</span>
+                </div>
+                <span className="text-[10px] text-cyan-700 font-medium">Mild Subtropical</span>
+              </div>
+
+              {/* Refresh Action & API info */}
+              <div className="pt-2 flex items-center justify-between gap-3 text-[11px]">
+                <span className="text-slate-400 truncate">
+                  {lastWeatherFetch
+                    ? `Updated ${lastWeatherFetch.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+                    : 'Auto-updated live'}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() => fetchLiveWeather(true)}
+                  disabled={weatherLoading}
+                  className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${weatherLoading ? 'animate-spin' : ''}`} />
+                  <span>{weatherLoading ? 'Refreshing...' : 'Refresh Now'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: FULL RESOLUTION PHOTO LIGHTBOX */}
+      {activePhotoLightbox && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/90 backdrop-blur-md overflow-y-auto"
+          onClick={() => setActivePhotoLightbox(null)}
+        >
+          <div
+            className="bg-slate-900 border border-slate-700/80 rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl relative text-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative aspect-16/10 max-h-[75vh] w-full bg-black flex items-center justify-center">
+              <img
+                src={activePhotoLightbox.url}
+                alt={activePhotoLightbox.title}
+                className="max-h-full max-w-full object-contain"
+              />
+              <button
+                type="button"
+                onClick={() => setActivePhotoLightbox(null)}
+                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer"
+                title="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-4 sm:p-5 flex items-center justify-between gap-4 bg-slate-900/95">
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400">★ Authentic Batumi Photo</span>
+                <h3 className="text-base sm:text-lg font-bold text-white">{activePhotoLightbox.title}</h3>
+                {activePhotoLightbox.subtitle && (
+                  <p className="text-xs text-slate-300">{activePhotoLightbox.subtitle}</p>
+                )}
+              </div>
+              <a
+                href={activePhotoLightbox.url}
+                target="_blank"
+                rel="noreferrer"
+                className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold shrink-0 transition-colors"
+              >
+                View Full Image ↗
+              </a>
             </div>
           </div>
         </div>
