@@ -188,60 +188,12 @@ const Home = (props) => (
     <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
   </svg>
 );
-const Mail = (props) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-  </svg>
-);
-const MessageSquare = (props) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-  </svg>
-);
-const ShieldCheck = (props) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>
-  </svg>
-);
-const Send = (props) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-  </svg>
-);
 
-const PushPin = ({ className = '', color = 'red' }) => (
-  <div className={`relative inline-flex items-center justify-center filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.55)] z-20 pointer-events-none select-none ${className}`}>
-    <div className={`w-5 h-5 rounded-full border border-black/30 shadow-inner flex items-center justify-center relative ${
-      color === 'amber'
-        ? 'bg-gradient-to-br from-amber-300 via-amber-500 to-amber-800'
-        : color === 'blue'
-        ? 'bg-gradient-to-br from-sky-400 via-blue-600 to-blue-900'
-        : 'bg-gradient-to-br from-rose-400 via-red-600 to-red-950'
-    }`}>
-      {/* 3D Gloss Highlight */}
-      <div className="w-1.5 h-1.5 rounded-full bg-white/80 absolute top-0.5 left-1 pointer-events-none" />
-      {/* Metal center pin nail */}
-      <div className="w-1 h-1 rounded-full bg-slate-200/90 shadow-xs" />
-    </div>
-    {/* Needle Shadow */}
-    <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-0.5 h-2.5 bg-gradient-to-b from-stone-700 to-stone-900 -z-10 opacity-70" />
-  </div>
-);
 
-const MaskingTape = ({ className = '' }) => (
-  <div
-    className={`h-4 w-12 bg-amber-100/70 backdrop-blur-[0.5px] border-t border-b border-amber-300/40 shadow-xs pointer-events-none select-none z-10 ${className}`}
-    style={{
-      backgroundImage: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.2) 0px, rgba(255,255,255,0.2) 2px, transparent 2px, transparent 4px)',
-    }}
-  />
-);
 
-const PaperClip = (props) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
-  </svg>
-);
+
+
+
 
 const StarRatingBadge = ({ rating = 5, stars = 5, reviewsCount, showText = true, size = 'sm', className = '' }) => {
   const starCount = Math.min(5, Math.max(1, Math.round(stars || rating)));
