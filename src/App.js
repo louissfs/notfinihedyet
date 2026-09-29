@@ -1553,7 +1553,7 @@ export default function App() {
   const currentHeroImage = USER_PHOTOS.batumiBoulevard;
   // Restaurant Detail Modal state
   const [activeModalRestaurant, setActiveModalRestaurant] = useState(null);
-  const [activeCorkDayTab, setActiveCorkDayTab] = useState('all');
+// const [activeCorkDayTab, setActiveCorkDayTab] = useState('all');
 
   // Live Weather from OpenWeather RapidAPI
   const [weatherData, setWeatherData] = useState({
